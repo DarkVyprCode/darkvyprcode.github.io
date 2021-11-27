@@ -1,0 +1,3 @@
+  if (command === 'adblock') {
+    client.say(channel, `${tags.username} TriHard UBLOCK FILTERS: https://bit.ly/3j36lKB CHROME STORE: https://bit.ly/30hvkTF`);
+  }

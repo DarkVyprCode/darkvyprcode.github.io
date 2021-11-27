@@ -1,0 +1,3 @@
+  if (command === 'commands') {
+    client.say(channel, `${tags.username} A list of commands can be found here NekoProud 👉 https://darkvypr.com/commands`);
+  }

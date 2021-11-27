@@ -1,0 +1,9 @@
+  if (command === 'vm') {
+    db.get("vyprmoments").then(function(value) {
+      let origvm = `${value}`
+      let plusonevm = +origvm + +1
+      db.set("vyprmoments", `${plusonevm}`);
+      client.say(channel, (`${tags.username}, There has been ${plusonevm} vypr moments peepoShy`)
+      )
+    })
+  }

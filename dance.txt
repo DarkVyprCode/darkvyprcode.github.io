@@ -1,0 +1,14 @@
+  if (command === 'dance') {
+    client.say(channel, `${tags.username} elisDance https://i.darkvypr.com/dance.mp4`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+  }

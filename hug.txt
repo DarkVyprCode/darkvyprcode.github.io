@@ -1,0 +1,3 @@
+  if (command === 'hug') {
+    client.say(channel, `${tags.username} picks ${args[0]} up off of their feet and squeezes them tight ${hugmsg} 💗`);
+  }

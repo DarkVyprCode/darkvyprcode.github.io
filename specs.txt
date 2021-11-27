@@ -1,0 +1,3 @@
+  if (command === 'specs') {
+    client.say(channel, `${tags.username} https://darkvypr.com/specs NekoProud`);
+  }

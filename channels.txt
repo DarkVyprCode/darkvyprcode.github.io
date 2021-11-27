@@ -1,0 +1,3 @@
+  if (command === 'channels') {
+    client.say(channel, `${tags.username}, VyprBot is currently available in: #DarkVypr, #VisioisiV, #VexNade and #Imz_Loading. Ask @DarkVypr if you would like this bot in your channel!`);
+  }

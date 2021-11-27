@@ -1,0 +1,8 @@
+  if(command === 'query') {
+    axios.get(`https://api.wolframalpha.com/v1/result?i=${args.join(' ')}&appid=${process.env['WOLFRAM_KEY']}`)
+      .catch(err => { client.say(channel, `${tags.username}: Wolfram|Alpha did not understand your question! PANIC`)}) 
+      .then((response) => {
+        let queryresults = response.data
+        client.say(channel, `${tags.username} Results: ${queryresults}`);
+        })
+  }

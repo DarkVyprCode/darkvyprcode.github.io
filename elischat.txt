@@ -1,0 +1,8 @@
+  if (command === 'elischat') {
+    if (channel !== '#darkvypr') {
+      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    }
+    else {
+      client.say(channel, `${tags.username} https://i.imgur.com/J3qKoiZ.png`);
+    }
+  }

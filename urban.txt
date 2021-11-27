@@ -1,0 +1,12 @@
+  if(command === 'urban') {
+    axios.get(`https://api.urbandictionary.com/v0/define?term=${args.join(' ')}`)
+      .then((response) => {
+        let urbanresult = response.data
+        if(`${urbanresult.list[0]}` === 'undefined') {
+          client.say(channel, `${tags.username}, Urban Dictionary does not have a definition for that word!`)
+        }
+        else {
+          client.say(channel, `${tags.username}, ${urbanresult.list[0].definition}`)
+        }
+      });
+  }

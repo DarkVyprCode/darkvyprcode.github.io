@@ -1,0 +1,8 @@
+  if (command === 'firstlog') {
+    axios.get(`https://api.ivr.fi/logs/firstmessage/${logschannel}/${defaultname}`)
+    .catch(err => { client.say(channel, `${tags.username}, That channel or user dosen't exist, or is not logged!`)})
+    .then((response) => {
+      let firstmessage = response.data
+      client.say(channel, `${tags.username}: ${firstmessage.user}'s first message in #${logschannel} was "${firstmessage.message}" and that was sent ${firstmessage.time} ago.`)
+    });
+  }

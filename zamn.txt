@@ -1,0 +1,3 @@
+  if (command === 'zamn') {
+    client.say(channel, `${tags.username} https://files.darkvypr.com/backups/zamn.txt ZAMN`);
+  }

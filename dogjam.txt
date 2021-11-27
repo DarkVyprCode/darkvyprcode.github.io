@@ -1,0 +1,12 @@
+  if (command === 'dogjam') {
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+    client.say(channel, `dogJAM`);
+  }

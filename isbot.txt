@@ -1,0 +1,13 @@
+  if(command === 'isbot') {
+    axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
+    .catch(err => { client.say(channel, `${tags.username}, That user dosen't exist!`)})
+    .then((response) => {
+      let userdata = response.data
+      if(`${userdata.bot}` === 'true') {
+        client.say(channel, `${tags.username}, User, "${userdata.displayName}" is a verified bot! ✅`)
+      }
+      else {
+        client.say(channel, `${tags.username}, User, "${userdata.displayName}" is NOT a verified bot! ❌`)
+      }
+    });
+  }

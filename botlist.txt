@@ -1,0 +1,3 @@
+  if (command === 'botlist') {
+    client.say(channel, `${tags.username} MrDestructoid BOP https://files.darkvypr.com/DarkVyprBotList.txt`);
+  }

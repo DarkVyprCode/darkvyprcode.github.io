@@ -1,0 +1,3 @@
+  if (command === 'picsbeforedisaster') {
+    client.say(channel, `${tags.username} https://i.imgur.com/1hKKEx0.png`);
+  }

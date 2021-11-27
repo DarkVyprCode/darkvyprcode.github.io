@@ -1,0 +1,3 @@
+  if (command === 'pings') {
+    client.say(channel, `${tags.username} DinkDonk https://darkvypr.com/pings`);
+  }

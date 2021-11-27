@@ -1,0 +1,9 @@
+  if (command === 'ym') {
+    db.get("yagmoments").then(function(value) {
+      let origym = `${value}`
+      let plusoneym = +origym + +1
+      db.set("yagmoments", `${plusoneym}`);
+      client.say(channel, (`${tags.username}, There has been ${plusoneym} yag moments peepoChat`)
+      )
+    })
+  }

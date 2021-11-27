@@ -1,0 +1,3 @@
+  if (command === 'filerepo') {
+    client.say(channel, `${tags.username} http://filerepo.darkvypr.com`);
+  }

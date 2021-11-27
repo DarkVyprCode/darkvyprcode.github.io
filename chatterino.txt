@@ -1,0 +1,3 @@
+  if (command === 'chatterino') {
+    client.say(channel, `${tags.username} Homies: http://chatterinohomies.darkvypr.com Dankerino: http://dankerino.darkvypr.com`);
+  }

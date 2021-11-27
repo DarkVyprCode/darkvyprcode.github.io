@@ -1,0 +1,9 @@
+  if (command === 'bm') {
+    db.get("bisiomoments").then(function(value) {
+      let origbm = `${value}`
+      let plusonebm = +origbm + +1
+      db.set("bisiomoments", `${plusonebm}`);
+      client.say(channel, (`${tags.username}, There has been ${plusonebm} bisio moments donkJAM`)
+      )
+    })
+  }

@@ -1,0 +1,17 @@
+  if (command === 'whois') {
+    if(`${args[0]}` === 'undefined') {
+      client.say(channel, `${tags.username}, Please input a domain to lookup!`)
+    }
+    else {
+      axios.get(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${process.env['WHOIS_KEY']}&domainName=${args[0]}&outputFormat=JSON&ipWhois=1&preferFresh=1`)
+      .then((response) => {
+        let whoisresults = response.data
+        if(`${whoisresults.WhoisRecord.dataError}` === 'INCOMPLETE_DATA') {
+          client.say(channel, `${tags.username}, There was an error loading the data for ${args[0]}! Hint: That TLD isn't supported, or the domain dosent exist.`)
+        }
+        else {
+          client.say(channel, `${tags.username}, Info for "${whoisresults.WhoisRecord.domainName}" Registrant Name: ${whoisresults.WhoisRecord.registrant.name} | Registrar Name: ${whoisresults.WhoisRecord.registrarName} | Location: ${whoisresults.WhoisRecord.registrant.city}, ${whoisresults.WhoisRecord.registrant.country} | Created: "${whoisresults.WhoisRecord.registryData.audit.createdDate}"`);
+        }
+      })
+    }
+  }

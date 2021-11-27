@@ -1,0 +1,4 @@
+  if (command === 'minglee') {
+    client.say(channel, `${tags.username} https://www.youtube.com/watch?v=OjNpRbNdR7E`);
+    client.say(channel, `MingLee 🇨🇳 GLORY TO THE CCP`);
+  }

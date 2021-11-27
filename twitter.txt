@@ -1,0 +1,11 @@
+  if (command === 'twitter') {
+    db.get(`${tags.username}twitter`).then(function(value) {
+      let sendertwitter = `${value}`
+      if (sendertwitter !== 'null') {
+        client.say(channel, (`${tags.username}, ${tags.username}'s Twitter can be found at: https://twitter.com/${sendertwitter}`))
+      }
+      else {
+        client.say(channel, (`${tags.username}, To use the "!twitter" command, you must first set your Twitter account with the !settwitter command, followed by your twitter handle. Example: "!settwitter darkvyprr". More info: https://darkvypr.com/commands YESIDOTHINKSO`))
+      }
+    })
+  }

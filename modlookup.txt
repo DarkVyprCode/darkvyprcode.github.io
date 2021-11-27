@@ -1,0 +1,3 @@
+  if (command === 'modlookup') {
+    client.say(channel, `MODS https://modlookup.3v.fi/u/${defaultname} some channels won't be listed as they aren't tracked ${tags.username}.`);
+  }

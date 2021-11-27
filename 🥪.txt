@@ -1,0 +1,3 @@
+  if (command === '🥪') {
+    client.say(channel, `${tags.username} https://www.youtube.com/shorts/7XkP11Pomuc`);
+  }

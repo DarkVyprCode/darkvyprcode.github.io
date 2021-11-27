@@ -1,0 +1,3 @@
+  if (command === 'filters') {
+    client.say(channel, `${tags.username} http://settings.darkvypr.com`);
+  }

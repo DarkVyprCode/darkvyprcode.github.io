@@ -1,0 +1,25 @@
+  if (command === 'covid') {
+    if (`${args[0]}` === 'undefined') {
+      db.get(`${tags.username}country`).then(function(value) {
+        let usercountry = `${value}`
+        if (usercountry === 'null') {
+          client.say(channel, `${tags.username}, Before using this command, you must set your country with the !setcountry command. Example: "!setcountry Canada". More info: https://darkvypr.com/commands`)
+        }
+        else {
+          axios.get(`https://disease.sh/v3/covid-19/countries/${usercountry}?strict=false`)
+            .then((response) => {
+              let covidusercountry = response.data
+              client.say(channel, `${tags.username} Stats for your country (${covidusercountry.country}): Today's Cases: ${covidusercountry.todayCases} | Today's Deaths: ${covidusercountry.todayDeaths} | Total Cases: ${covidusercountry.cases} | Total Deaths: ${covidusercountry.deaths}`)
+            });
+        }
+      })
+    }
+
+    else {
+      axios.get(`https://disease.sh/v3/covid-19/countries/${args.join(' ')}?strict=false`)
+        .then((response) => {
+          let coviduserquery = response.data
+          client.say(channel, `${tags.username} Stats for ${coviduserquery.country}: Today's Cases: ${coviduserquery.todayCases} | Today's Deaths: ${coviduserquery.todayDeaths} | Total Cases: ${coviduserquery.cases} | Total Deaths: ${coviduserquery.deaths}`)
+        });
+    }
+  }

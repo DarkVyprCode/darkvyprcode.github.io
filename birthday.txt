@@ -1,0 +1,19 @@
+  if(command === 'birthday') {
+    if(`${args[0]}` === 'undefined') {
+      db.get(`${tags.username}bday`).then(function(value) {
+        let bdayvalue = `${value}`
+        if(bdayvalue === 'null') {
+          client.say(channel, `${tags.username}, To use the "!birthday" command, you must first set your birthday with the "!setbirthday" command. Example: "!setbirthday August 14". More info: https://darkvypr.com/commands`)
+        }
+        else {
+          client.say(channel, `${tags.username}, Your birthday is on ${bdayvalue}!`)
+        }
+      })
+    }
+    else {
+      db.get(`${args[0]}bday`).then(function(value) {
+        let bdayvalue = `${value}`
+        client.say(channel, `${tags.username}, ${args[0]}'s birthday is on ${bdayvalue}!`)
+      }) 
+    }
+  }

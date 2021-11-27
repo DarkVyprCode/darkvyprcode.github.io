@@ -1,0 +1,21 @@
+  // OCR Language Detect
+
+  let ocrlang = `${args[1]}`
+
+  if (`${ocrlang}` !== 'undefined') {
+    var ocrlangresult = `&language=${args[1]}`
+  }
+
+  else {
+    var ocrlangresult = '&language=eng'
+  }
+
+  // OCR Command
+
+  if (command === 'ocr') {
+    axios.get(`https://api.ocr.space/parse/imageurl?apikey=${process.env['OCR_KEY']}&url=${args[0]}${ocrlangresult}`)
+      .then((response) => {
+        let ocrresults = response.data
+        client.say(channel, `${tags.username} OCR Results: ${ocrresults.ParsedResults[0].ParsedText}`);
+      });
+  }

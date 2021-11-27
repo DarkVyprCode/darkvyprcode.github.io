@@ -1,0 +1,4 @@
+  if (command === 'alogs') {
+    console.log({ command, args });
+    client.say(channel, `${tags.username} https://logs.apulxd.ga/?channel=${defaultname2}&username=${defaultname}`)
+  }

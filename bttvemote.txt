@@ -1,0 +1,3 @@
+  if (command === 'bttvemote') {
+    client.say(channel, `${tags.username} https://betterttv.com/emotes/shared/search?query=${args[0]}`);
+  }

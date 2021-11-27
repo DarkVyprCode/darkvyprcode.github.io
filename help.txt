@@ -1,0 +1,3 @@
+  if (command === 'help') {
+    client.say(channel, `Bot Info: https://darkvypr.com/info | Get a list of commands by doing !commands NekoProud`);
+  }

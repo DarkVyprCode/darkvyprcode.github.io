@@ -1,0 +1,7 @@
+  if (command === 'catfact') {
+    axios.get('https://catfact.ninja/fact?max_length=300')
+      .then((response) => {
+        let catfact = response.data
+        client.say(channel, `${tags.username}: ${catfact.fact}`);
+      });
+  }

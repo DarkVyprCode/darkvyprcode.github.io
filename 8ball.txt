@@ -1,0 +1,7 @@
+  if (command === '8ball') {
+    axios.get(`https://8ball.delegator.com/magic/JSON/${args.join(' ')}`)
+      .then((response) => {
+        let ballresults = response.data
+        client.say(channel, `${tags.username} The 8-Ball says: ${ballresults.magic.answer}`);
+      });
+  }

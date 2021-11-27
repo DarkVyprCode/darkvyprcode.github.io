@@ -1,0 +1,3 @@
+  if (command === 'breed') {
+    client.say(channel, `${tags.username} breeds with ${args[0]} for hours LewdAhegao spilledGlue`);
+  }

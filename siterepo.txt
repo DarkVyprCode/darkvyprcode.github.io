@@ -1,0 +1,3 @@
+  if (command === 'siterepo') {
+    client.say(channel, `${tags.username} http://siterepo.darkvypr.com`);
+  }

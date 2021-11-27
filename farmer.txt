@@ -1,0 +1,4 @@
+  if (command === 'farmer') {
+    client.say(channel, `${tags.username} MrDestructoid Farmer: http://miner.darkvypr.com`);
+    client.say(channel, `${tags.username} Setup: https://youtu.be/0VkM7NOZkuA`);
+  }

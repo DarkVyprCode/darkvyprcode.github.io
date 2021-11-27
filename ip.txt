@@ -1,0 +1,7 @@
+  if (command === 'ip') {
+    axios.get(`http://api.ipstack.com/${args[0]}?access_key=${process.env['IP_KEY']}`)
+      .then((response) => {
+        let ipresults = response.data
+        client.say(channel, `${tags.username} Results for "${ipresults.ip}": Type: "${ipresults.type}" | Location ( ${ipresults.location.country_flag_emoji} ): "${ipresults.city}, ${ipresults.region_name}, ${ipresults.country_name}"`);
+      });
+  }

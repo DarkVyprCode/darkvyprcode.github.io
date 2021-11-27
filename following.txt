@@ -1,0 +1,3 @@
+  if (command === 'following') {
+    client.say(channel, `${tags.username} Visit: https://okayeg.com/followlist?username=${defaultname} for a list of people that ${defaultname} is following.`);
+  }

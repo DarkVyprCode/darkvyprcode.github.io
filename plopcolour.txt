@@ -1,0 +1,3 @@
+  if (command === 'plopcolour') {
+    client.say(channel, `${tags.username} #94DCCC`);
+  }

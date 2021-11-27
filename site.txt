@@ -1,0 +1,8 @@
+  if (command === 'site') {
+    if (channel !== '#darkvypr') {
+      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    }
+    else {
+      client.say(channel, `${tags.username} https://darkvypr.com NekoProud`);
+    }
+  }

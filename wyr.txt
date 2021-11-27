@@ -1,0 +1,7 @@
+  if (command === 'wyr') {
+    axios.get(`https://would-you-rather-api.abaanshanid.repl.co/`)
+      .then((response) => {
+        let wyrresult = response.data
+        client.say(channel, `${tags.username}, ${wyrresult.data} `);
+      });
+  }

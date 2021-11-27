@@ -1,0 +1,114 @@
+  // Loyalty System
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  if(command === 'hunt') {
+    if(talkedRecently.has(`${tags.username}`)) {
+      client.say(channel, (`${tags.username}, You must wait 1 hour in between hunting! GearScare ⛔`))
+    }
+
+    else {
+      db.get(`${tags.username}nammers`).then(function(value) {
+			  let nammers = `${value}`
+          if(nammers === 'null') {
+            let nammeramount = getRandomInt(30)
+            db.set(`${tags.username}nammers`, nammeramount)
+            (client.say(channel, (`${tags.username} --> KKona 👋 This is your first time hunting! You caught ${nammeramount} nammers, and have a balance of: ${nammeramount} nammers. GearSmile Stab`)))
+		      }
+          else { 
+            let nammeramount = getRandomInt(30)
+            console.log(nammers)
+            console.log(nammeramount)
+            let totalnammers = +nammers + nammeramount
+            console.log(totalnammers)
+            db.set(`${tags.username}nammers`, totalnammers)
+            client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${nammeramount} nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
+            
+            talkedRecently.add(`${tags.username}`);
+            setTimeout(() => {
+              talkedRecently.delete(`${tags.username}`);
+            }, 3600000);
+          }
+      })
+    }
+  }
+
+  if(command === 'kill') {
+		db.get(`${tags.username}nammers`).then(function(value) {
+			let nammers = `${value}`
+        if(nammers === 'null') {
+          client.say(channel, (`${tags.username} --> GearScare ⛔ You don't have any nammers to kill! Use "!hunt" to get more.`))
+		    }
+        else {
+          if(+`${args[0]}` > +`${nammers}`) {
+            client.say(channel, (`${tags.username} --> MenheraCry You try to kill ${args[0]} nammers, but realize that you only have ${nammers} nammers, and give up.`))
+          }
+          else {
+            let beforekill = nammers
+            let killamount = `${args[0]}`
+            if(+`${killamount}` <= 0) {
+              client.say(channel, (`${tags.username} --> Nice try NekoStare`))
+            }
+            else {
+              let afterkill = +nammers - +killamount
+              db.set(`${tags.username}nammers`, afterkill)
+              client.say(channel, (`${tags.username} --> NekoProud 🔪 You brutally execute ${args[0]} nammers, and are left with ${afterkill} nammers.`))
+            }
+          }
+        }
+      })
+  }
+
+  if(command === 'nammers') {
+		db.get(`${tags.username}nammers`).then(function(value) {
+			let nammers = `${value}`
+        if(nammers === 'null') {
+          client.say(channel, (`${tags.username} --> GearScare ⛔ You don't have any nammers! Get some by typing "!hunt", and kill some by typing "!kill {amount}"!`))
+		    }
+        else {
+          client.say(channel, (`${tags.username} --> NOTED You have ${nammers} nammers. Get some by typing "!hunt", and kill some by typing "!kill {amount}".`))
+        }
+      })
+  }
+
+  if(command === 'give') {
+		db.get(`${tags.username}nammers`).then(function(value) {
+			let nammers = `${value}`
+        if(nammers === 'null') {
+          client.say(channel, (`${tags.username} --> GearScare ⛔ It looks like you dont have any nammers to give away! Use "!hunt" to get more. ppOverheat`))
+		    }
+        else {
+          let giveamount = `${args[1]}`
+          let recipientup = `${args[0]}`
+          let recipient = recipientup.toLowerCase()
+          if(+`${giveamount}` > +`${nammers}`) {
+            client.say(channel, (`${tags.username} --> GearScare ⛔ You tried to give away ${giveamount} nammers, but you only have ${nammers} nammers. You keep all of your nammers for a rainy day.`))
+          }
+          else {
+            db.get(`${recipient}nammers`).then(function(valuerecipient) {
+              let recipientnammers = `${valuerecipient}`
+
+              if(`${recipientnammers}` === 'null') {
+                client.say(channel, `${tags.username} --> That user dosen't exist in the database!`)
+              }
+
+              else {
+                if(+`${giveamount}` <= 0) {
+                  client.say(channel, (`${tags.username} --> Nice try NekoStare`))
+                }
+                else {
+                  let aftergive = +nammers - +giveamount
+                  db.set(`${tags.username}nammers`, aftergive)
+                  let recipientaddednammers = +recipientnammers + +giveamount
+
+                  db.set(`${recipient}nammers`, recipientaddednammers)
+                  client.say(channel, `${tags.username} --> GearSmile 👉 🚢 Successfully shipped ${giveamount} nammers to ${recipient}! Your new balance is: ${aftergive} nammers, and ${recipient}'s new balance is: ${recipientaddednammers} nammers!`)
+                }
+              }
+            })
+          }
+        }
+      })
+  }

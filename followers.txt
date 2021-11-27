@@ -1,0 +1,3 @@
+  if (command === 'followers') {
+    client.say(channel, `${tags.username} Visit: https://twitch-tools.rootonline.de/followerlist_viewer.php?channel=${defaultname} for a list of people that follow ${defaultname} NOTED`);
+  }

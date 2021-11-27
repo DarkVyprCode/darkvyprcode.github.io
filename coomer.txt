@@ -1,0 +1,3 @@
+  if (command === 'coomer') {
+    client.say(channel, `${tags.username} https://i.imgur.com/PqQCXC3.png`);
+  }

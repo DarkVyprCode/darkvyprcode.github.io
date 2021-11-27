@@ -1,0 +1,3 @@
+  if (command === 'ffzemote') {
+    client.say(channel, `${tags.username} https://www.frankerfacez.com/emoticons/?q=${args[0]}&sort=count-desc&days=0`);
+  }

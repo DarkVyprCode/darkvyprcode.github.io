@@ -1,0 +1,3 @@
+  if (command === 'nam') {
+    client.say(channel, `${tags.username} 👉 🚪 NammersOut elisDance NammersOut`);
+  }

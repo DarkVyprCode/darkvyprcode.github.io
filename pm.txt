@@ -1,0 +1,9 @@
+  if (command === 'pm') {
+    db.get("plopmoments").then(function(value) {
+      let origpm = `${value}`
+      let plusonepm = +origpm + +1
+      db.set("plopmoments", `${plusonepm}`);
+      client.say(channel, (`${tags.username}, There has been ${plusonepm} plop moments donkJAM`)
+      )
+    })
+  }

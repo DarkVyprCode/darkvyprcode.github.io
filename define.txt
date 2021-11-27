@@ -1,0 +1,18 @@
+  if(command === 'define') {
+    axios.get(`https://dictionaryapi.com/api/v3/references/collegiate/json/${args.join(' ')}?key=${process.env['DICTIONARY_KEY']}`)
+      .then((response) => {
+        let defineresult = response.data[0]
+        if(`${defineresult}` === 'undefined') {
+          client.say(channel, `${tags.username}, No definition available for that string or word!`)
+        }
+        else {
+          let shortanswer = `${defineresult.shortdef}`
+          if(`${shortanswer}` === 'undefined') {
+            client.say(channel, `${tags.username}, No definition available for that string or word!`)
+          }
+          else {
+            client.say(channel, `${tags.username}, Definition: ${shortanswer}`)
+          }
+        }
+      });
+  }

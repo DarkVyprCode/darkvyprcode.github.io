@@ -1,0 +1,3 @@
+  if (command === '7tvuser') {
+    client.say(channel, `${tags.username} https://7tv.app/users/${defaultname}`);
+  }

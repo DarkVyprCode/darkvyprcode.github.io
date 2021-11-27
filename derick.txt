@@ -1,0 +1,3 @@
+  if (command === 'derick') {
+    client.say(channel, `${tags.username} https://i.imgur.com/Uo9K0xk.png`);
+  }

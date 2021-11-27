@@ -1,0 +1,7 @@
+  if (command === 'vei') {
+    client.say(channel, `veiSway`);
+    client.say(channel, `veiSway`);
+    client.say(channel, `veiSway`);
+    client.say(channel, `veiSway`);
+    client.say(channel, `veiSway`);
+  }

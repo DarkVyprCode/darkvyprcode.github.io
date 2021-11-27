@@ -1,0 +1,3 @@
+  if (command === 'kiss') {
+    client.say(channel, `${tags.username} pulls ${args[0]} close and kisses them on the lips. ${kissmsg} 💋💖`);
+  }

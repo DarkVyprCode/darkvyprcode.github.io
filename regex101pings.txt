@@ -1,0 +1,3 @@
+  if (command === 'regex101pings') {
+    client.say(channel, `${tags.username} DinkDonk https://regex101.com/r/WtN0Sp/12`);
+  }

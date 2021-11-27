@@ -1,0 +1,3 @@
+  if (command === 'fuck') {
+    client.say(channel, `${tags.username} fucks ${args[0]} LewdAhegao spilledGlue`);
+  }

@@ -1,0 +1,3 @@
+  if (command === 'gnkiss') {
+    client.say(channel, `${tags.username} tucks ${args[0]} to bed and gently kisses their cheek: ${gnkissmsg}`);
+  }

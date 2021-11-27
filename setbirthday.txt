@@ -1,0 +1,4 @@
+  if(command === 'setbirthday') {
+    db.set(`${tags.username}bday`, `${args.join(' ')}`)
+      .then(client.say(channel, `${tags.username}, Succesfully set your birthday to ${args.join(' ')}!`))
+  }

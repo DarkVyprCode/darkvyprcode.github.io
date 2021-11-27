@@ -1,0 +1,3 @@
+  if (command === 'numbers') {
+    client.say(channel, `${tags.username} NOTED https://darkvypr.com/numbers`);
+  }

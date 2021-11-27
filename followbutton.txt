@@ -1,0 +1,3 @@
+  if (command === 'followbutton') {
+    client.say(channel, `${tags.username} https://i.darkvypr.com/follow.mp4`);
+  }

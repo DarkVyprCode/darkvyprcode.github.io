@@ -1,0 +1,17 @@
+  if (command === 'emotes') {
+    if(`${args[0]}` === 'undefined') {
+      axios.get(`https://api.ivr.fi/twitch/resolve/${tags.username}`)
+      .then((response) => {
+      let userdata = response.data
+      client.say(channel, `${tags.username}, The emotes for ${userdata.displayName} can be found at: https://emotes.raccatta.cc/twitch/${userdata.displayName}`);
+      });
+    }
+    else {
+      axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
+      .catch(err => { client.say(channel, `${tags.username}, That user dosen't exist!`)})
+      .then((response) => {
+      let userdata = response.data
+      client.say(channel, `${tags.username}, The emotes for ${userdata.displayName} can be found at: https://emotes.raccatta.cc/twitch/${userdata.displayName}`);
+      });  
+    }
+  }

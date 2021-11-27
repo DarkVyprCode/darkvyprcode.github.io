@@ -1,0 +1,3 @@
+  if (command === 'say') {
+    client.say(channel, `👥 ${args.join(' ')}`);
+  }

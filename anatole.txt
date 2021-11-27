@@ -1,0 +1,3 @@
+  if (command === 'anatole') {
+    client.say(channel, `${tags.username} give 7tv personals MenheraSlam`);
+  }

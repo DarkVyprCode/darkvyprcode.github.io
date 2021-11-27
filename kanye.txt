@@ -1,0 +1,7 @@
+  if (command === 'kanye') {
+    axios.get('https://api.kanye.rest/')
+      .then((response) => {
+        let kanyequote = response.data
+        client.say(channel, `${tags.username} Random Kanye Quote: "${kanyequote.quote}"`);
+      });
+  }

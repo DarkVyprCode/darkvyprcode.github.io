@@ -1,0 +1,3 @@
+  if (command === 'vyprcolour') {
+    client.say(channel, `${tags.username} #FF7FD3`);
+  }

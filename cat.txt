@@ -1,0 +1,7 @@
+  if (command === 'cat') {
+    axios.get('https://api.thecatapi.com/v1/images/search')
+      .then((response) => {
+        let catimage = response.data[0]
+        client.say(channel, `${tags.username} Random cat: ${catimage.url}`);
+      });
+  }

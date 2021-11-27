@@ -1,0 +1,4 @@
+  if (command === 'logs') {
+    console.log({ command, args });
+    client.say(channel, `${tags.username} https://logs.ivr.fi/?channel=${logschannel}&username=${defaultname}`)
+  }
