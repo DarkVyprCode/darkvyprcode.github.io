@@ -1,0 +1,12 @@
+  if(command === 'setlocation') {
+    let location1 = `${args[0]}`
+    let location2 = `${args[1]}`
+
+    let location1up = location1[0].toUpperCase() + location1.substring(1)
+    let location2up = location2[0].toUpperCase() + location2.substring(1)
+
+    let finallocation = `${location1up}, ${location2up}`
+
+    db.set(`${tags.username}time`, `${finallocation}`)
+    .then(client.say(channel, `${tags.username}, Succesfully set your location to ${finallocation}!`))
+  }
