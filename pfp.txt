@@ -1,8 +1,17 @@
   if(command === 'pfp') {
-    axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
-    .catch(err => { client.say(channel, `${tags.username}, That user dosen't exist!`)})
-    .then((response) => {
-      let userdata = response.data
-      client.say(channel, `${tags.username}, ${userdata.logo}`)
-    });
+    if(`${args[0]}` === 'undefined') {
+     axios.get(`https://api.ivr.fi/twitch/resolve/${tags.username}`)
+      .then((response) => {
+        let userdata = response.data
+        client.say(channel, `${tags.username}, ${userdata.logo}`)
+      });
+    }
+    else {
+     axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
+      .catch(err => { client.say(channel, `${tags.username}, That user doesn't exist!`)})
+      .then((response) => {
+        let userdata = response.data
+        client.say(channel, `${tags.username}, ${userdata.logo}`)
+      });
+    }
   }
