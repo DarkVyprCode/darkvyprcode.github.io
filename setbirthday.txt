@@ -1,4 +1,6 @@
   if(command === 'setbirthday') {
-    db.set(`${tags.username}bday`, `${args.join(' ')}`)
-      .then(client.say(channel, `${tags.username}, Succesfully set your birthday to ${args.join(' ')}!`))
+    let bdaymonthlow = `${args.join(' ')}`
+    let bdaymonthup = bdaymonthlow[0].toUpperCase() + bdaymonthlow.substring(1)
+    db.set(`${tags.username}bday`, `${bdaymonthup}`)
+      .then(client.say(channel, `${tags.username}, Succesfully set your birthday to ${bdaymonthup}!`))
   }
