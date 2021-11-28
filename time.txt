@@ -1,9 +1,9 @@
 	if(command === 'time') {
     if(`${args[0]}` === 'undefined') {
 		  db.get(`${tags.username}time`).then(function(value) {
-			  let senderttime = `${value}` // FIX THE USER LOCATION LOOKUP
+			  let senderttime = `${value}`
         if(senderttime === 'null') {
-          client.say(channel, (`${tags.username}, To use the "!time" command, you must first set your location with the "!setlocation" command. Example: "!setlocation lasalle ontario". More Info: https://darkvypr.com/commands`))
+          client.say(channel, (`${tags.username}, To use the "!time" command, you must first set your location with the "!setlocation" command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`))
 		    }
         else {
           axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${senderttime}`)
