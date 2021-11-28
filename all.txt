@@ -435,7 +435,7 @@ client.on('message', (channel, tags, message, self) => {
             let convertedcountry = response.data
             let parsedconvertedcountry = `${convertedcountry.results[0].address.country}`
 
-          axios.get(`https://corona.lmao.ninja/v2/countries/${parsedconvertedcountry}`)
+          axios.get(`https://disease.sh/v3/covid-19/countries/${parsedconvertedcountry}`)
           .then((response) => {
             let covidusercountry = response.data
             client.say(channel, `${tags.username} Stats for your country (${covidusercountry.country}): Today's Cases: ${covidusercountry.todayCases} | Today's Deaths: ${covidusercountry.todayDeaths} | Total Cases: ${covidusercountry.cases} | Total Deaths: ${covidusercountry.deaths}`)
@@ -446,12 +446,27 @@ client.on('message', (channel, tags, message, self) => {
     }
 
     else {
-      axios.get(`https://corona.lmao.ninja/v2/countries/${args.join(' ')}`)
+      axios.get(`https://disease.sh/v3/covid-19/countries/${args.join(' ')}`)
         .then((response) => {
           let coviduserquery = response.data
           client.say(channel, `${tags.username} Stats for ${coviduserquery.country}: Today's Cases: ${coviduserquery.todayCases} | Today's Deaths: ${coviduserquery.todayDeaths} | Total Cases: ${coviduserquery.cases} | Total Deaths: ${coviduserquery.deaths}`)
       });
     }
+  }
+
+  if (command === 'dance') {
+    client.say(channel, `${tags.username} elisDance https://i.darkvypr.com/dance.mp4`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
+    client.say(channel, `elisDance`);
   }
 
   if(command === 'define') {
@@ -490,19 +505,22 @@ client.on('message', (channel, tags, message, self) => {
     client.say(channel, `dogJAM`);
   }
 
-  if (command === 'dance') {
-    client.say(channel, `${tags.username} elisDance https://i.darkvypr.com/dance.mp4`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
-    client.say(channel, `elisDance`);
+  if (command === 'domain') {
+    if(`${args[0]}` === 'undefined') {
+      client.say(channel, `${tags.username}, Please input a domain to lookup!`)
+    }
+    else {
+      axios.get(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${process.env['WHOIS_KEY']}&domainName=${args[0]}&outputFormat=JSON&ipWhois=1&preferFresh=1`)
+      .then((response) => {
+        let whoisresults = response.data
+        if(`${whoisresults.WhoisRecord.dataError}` === 'INCOMPLETE_DATA') {
+          client.say(channel, `${tags.username}, There was an error loading the data for ${args[0]}! Hint: That TLD isn't supported, or the domain dosent exist.`)
+        }
+        else {
+          client.say(channel, `${tags.username}, Info for "${whoisresults.WhoisRecord.domainName}" Registrant Name: ${whoisresults.WhoisRecord.registrant.name} | Registrar Name: ${whoisresults.WhoisRecord.registrarName} | Location: ${whoisresults.WhoisRecord.registrant.city}, ${whoisresults.WhoisRecord.registrant.country} | Created: "${whoisresults.WhoisRecord.registryData.audit.createdDate}"`);
+        }
+      })
+    }
   }
 
   if (command === 'echo') {
@@ -709,12 +727,21 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if(command === 'pfp') {
-    axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
-    .catch(err => { client.say(channel, `${tags.username}, That user doesn't exist!`)})
-    .then((response) => {
-      let userdata = response.data
-      client.say(channel, `${tags.username}, ${userdata.logo}`)
-    });
+    if(`${args[0]}` === 'undefined') {
+     axios.get(`https://api.ivr.fi/twitch/resolve/${tags.username}`)
+      .then((response) => {
+        let userdata = response.data
+        client.say(channel, `${tags.username}, ${userdata.logo}`)
+      });
+    }
+    else {
+     axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
+      .catch(err => { client.say(channel, `${tags.username}, That user doesn't exist!`)})
+      .then((response) => {
+        let userdata = response.data
+        client.say(channel, `${tags.username}, ${userdata.logo}`)
+      });
+    }
   }
 
   if (command === 'picsbeforedisaster') {
@@ -801,7 +828,7 @@ client.on('message', (channel, tags, message, self) => {
 		  db.get(`${tags.username}time`).then(function(value) {
 			  let senderttime = `${value}`
         if(senderttime === 'null') {
-          client.say(channel, (`${tags.username}, To use the "!time" command, you must first set your location with the "!setlocation" command. Example: "!setlocation lasalle ontario". More Info: https://darkvypr.com/commands`))
+          client.say(channel, (`${tags.username}, To use the "!time" command, you must first set your location with the "!setlocation" command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`))
 		    }
         else {
           axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${senderttime}`)
@@ -868,24 +895,6 @@ client.on('message', (channel, tags, message, self) => {
 
   if (command === 'vyprcolour') {
     client.say(channel, `${tags.username} #FF7FD3`);
-  }
-
-  if (command === 'whois') {
-    if(`${args[0]}` === 'undefined') {
-      client.say(channel, `${tags.username}, Please input a domain to lookup!`)
-    }
-    else {
-      axios.get(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${process.env['WHOIS_KEY']}&domainName=${args[0]}&outputFormat=JSON&ipWhois=1&preferFresh=1`)
-      .then((response) => {
-        let whoisresults = response.data
-        if(`${whoisresults.WhoisRecord.dataError}` === 'INCOMPLETE_DATA') {
-          client.say(channel, `${tags.username}, There was an error loading the data for ${args[0]}! Hint: That TLD isn't supported, or the domain dosent exist.`)
-        }
-        else {
-          client.say(channel, `${tags.username}, Info for "${whoisresults.WhoisRecord.domainName}" Registrant Name: ${whoisresults.WhoisRecord.registrant.name} | Registrar Name: ${whoisresults.WhoisRecord.registrarName} | Location: ${whoisresults.WhoisRecord.registrant.city}, ${whoisresults.WhoisRecord.registrant.country} | Created: "${whoisresults.WhoisRecord.registryData.audit.createdDate}"`);
-        }
-      })
-    }
   }
 
   if (command === 'wyr') {
