@@ -15,7 +15,9 @@ const client = new tmi.Client({
     username: process.env['TWITCH_USERNAME'], // Username of the bot
     password: process.env['TWITCH_PASSWORD'], // OAuth key for the bot
   },
+
   channels: ['darkvypr', 'vyprbot', 'visioisiv', 'imz_loading', 'VexNade']
+
 });
 
 // Connect
@@ -895,6 +897,170 @@ client.on('message', (channel, tags, message, self) => {
 
   if (command === 'vyprcolour') {
     client.say(channel, `${tags.username} #FF7FD3`);
+  }
+
+	if(command === 'weather') {
+    if(`${args[0]}` === 'undefined') {
+      db.get(`${tags.username}time`).then(function(value) {
+        let usercitycountry = `${value}`
+        if(usercitycountry === 'null') {
+          client.say(channel, `${tags.username}, Before using this command, you must set your location with the !setlocation command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`)
+        }
+        else {
+          axios.get(`https://geocode.search.hereapi.com/v1/geocode?q=${usercitycountry}&apiKey=${process.env['GEOCODING_KEY']}`)
+          .then((response) => {
+            let unparsedcoords = response.data
+            let parsedcoordslat = `${unparsedcoords.items[0].position.lat}`
+            let parsedcoordslong = `${unparsedcoords.items[0].position.lng}`
+            let namefromapi = `${unparsedcoords.items[0].title}`
+
+          axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${parsedcoordslat}&lon=${parsedcoordslong}&units=metric&appid=${process.env['WEATHER_KEY']}`)
+          .then((response) => {
+            let weatherresults = response.data
+            let checkcondition = `${weatherresults.weather[0].main}`
+            let checkicon = `${weatherresults.weather[0].icon}`
+            let weatherdescription = `${weatherresults.weather[0].description}`
+
+            if(checkcondition === 'Clear') {
+              let checkedcondition = 'with clear skies ☀️🌇'
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+            else if(checkcondition === 'Thunderstorm') {
+              let checkedcondition = `with a ${weatherdescription} ⛈️☔`
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+            else if(checkcondition === 'Drizzle') {
+              let checkedcondition = 'with slight rain 🌦️🌧️'
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+            else if(checkcondition === 'Rain') {
+              let checkedcondition = `with ${weatherdescription} 🌧️☔`
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+            else if(checkcondition === 'Snow') {
+              let checkedcondition = `with ${weatherdescription} 🌨️❄️`
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+            else if(checkcondition === 'Clouds') {
+              let checkedcondition = `with ${weatherdescription} ☁️🌥️`
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+            else if(checkicon === '50d') {
+              let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            }
+          });
+          });
+        }
+      })
+    }
+
+    else {
+      let specificlocation = `${args.join(' ')}`
+      if(specificlocation[0] === '@') {
+        let removedatsign = specificlocation[0].replace('@', '') + specificlocation.substring(1)
+        let removedatsignlow = removedatsign.toLowerCase()
+		    db.get(`${removedatsignlow}time`).then(function(value) {
+			    let lookuptime = `${value}`
+          if(lookuptime === 'null') {
+            client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            axios.get(`https://geocode.search.hereapi.com/v1/geocode?q=${lookuptime}&apiKey=${process.env['GEOCODING_KEY']}`)
+            .then((response) => {
+              let unparsedcoords = response.data
+              let parsedcoordslat = `${unparsedcoords.items[0].position.lat}`
+              let parsedcoordslong = `${unparsedcoords.items[0].position.lng}`
+              let namefromapi = `${unparsedcoords.items[0].title}`
+
+           axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${parsedcoordslat}&lon=${parsedcoordslong}&units=metric&appid=${process.env['WEATHER_KEY']}`)
+            .then((response) => {
+             let weatherresults = response.data
+             let checkcondition = `${weatherresults.weather[0].main}`
+             let checkicon = `${weatherresults.weather[0].icon}`
+             let weatherdescription = `${weatherresults.weather[0].description}`
+
+             if(checkcondition === 'Clear') {
+               let checkedcondition = 'with clear skies ☀️🌇'
+               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+             }
+             else if(checkcondition === 'Thunderstorm') {
+                let checkedcondition = `with a ${weatherdescription} ⛈️☔`
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              }
+              else if(checkcondition === 'Drizzle') {
+                let checkedcondition = 'with slight rain 🌦️🌧️'
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              }
+              else if(checkcondition === 'Rain') {
+                let checkedcondition = `with ${weatherdescription} 🌧️☔`
+               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              }
+              else if(checkcondition === 'Snow') {
+                let checkedcondition = `with ${weatherdescription} 🌨️❄️`
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              }
+              else if(checkcondition === 'Clouds') {
+                let checkedcondition = `with ${weatherdescription} ☁️🌥️`
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              }
+              else if(checkicon === '50d') {
+                let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              }
+            });
+            });
+          }
+        })
+      }
+
+      else {
+        axios.get(`https://geocode.search.hereapi.com/v1/geocode?q=${args.join(' ')}&apiKey=${process.env['GEOCODING_KEY']}`)
+          .then((response) => {
+            let unparsedcoords = response.data
+            let parsedcoordslat = `${unparsedcoords.items[0].position.lat}`
+            let parsedcoordslong = `${unparsedcoords.items[0].position.lng}`
+            let namefromapi = `${unparsedcoords.items[0].title}`
+
+        axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${parsedcoordslat}&lon=${parsedcoordslong}&units=metric&appid=${process.env['WEATHER_KEY']}`)
+        .then((response) => {
+          let weatherresults = response.data
+          let checkcondition = `${weatherresults.weather[0].main}`
+          let checkicon = `${weatherresults.weather[0].icon}`
+          let weatherdescription = `${weatherresults.weather[0].description}`
+
+          if(checkcondition === 'Clear') {
+            let checkedcondition = 'with clear skies ☀️🌇'
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+          else if(checkcondition === 'Thunderstorm') {
+            let checkedcondition = `with a ${weatherdescription} ⛈️☔`
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+          else if(checkcondition === 'Drizzle') {
+            let checkedcondition = 'with slight rain 🌦️🌧️'
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+          else if(checkcondition === 'Rain') {
+            let checkedcondition = `with ${weatherdescription} 🌧️☔`
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+          else if(checkcondition === 'Snow') {
+            let checkedcondition = `with ${weatherdescription} 🌨️❄️`
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+          else if(checkcondition === 'Clouds') {
+            let checkedcondition = `with ${weatherdescription} ☁️🌥️`
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+          else if(checkicon === '50d') {
+            let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+          }
+        });
+        });
+      }
+    }
   }
 
   if (command === 'wyr') {
