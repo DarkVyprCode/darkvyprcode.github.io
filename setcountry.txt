@@ -1,4 +1,0 @@
-  if (command === 'setcountry') {
-    db.set(`${tags.username}country`, `${args.join(' ')}`)
-      .then(client.say(channel, `${tags.username}, Succesfully set your country to ${args.join(' ')}!`))
-  }
