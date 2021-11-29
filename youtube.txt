@@ -1,4 +1,4 @@
-  if (command === 'youtube') {
+  if (command === 'youtube'|| command === 'yt') {
     if (channel !== '#darkvypr') {
       client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
     }
