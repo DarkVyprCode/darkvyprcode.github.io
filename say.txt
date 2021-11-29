@@ -1,3 +1,3 @@
-  if (command === 'say') {
+  if (command === 'say' || command === 'echo') {
     client.say(channel, `👥 ${args.join(' ')}`);
   }
