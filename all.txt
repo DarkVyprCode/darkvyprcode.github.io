@@ -122,21 +122,7 @@ client.on('message', (channel, tags, message, self) => {
 
   // Bot Info
 
-  if (command === 'ping') {
-    client.ping().then(function(data) {
-      let ping = Math.floor(Math.round(data * 1000))
-      let Sseconds = process.uptime()
-
-    db.get("commandusage").then(function(value) {
-      let usage = `${value}`
-
-      client.say(channel, (`PunOko 🏓 ${tags.username} | Latency: ${ping} ms | Bot Uptime: ${cleanSeconds(Sseconds)} | Commands Used: ${usage} | Prefix: "!" | Use !commands to get a list of commands.`)
-      )
-    })
-    })
-  }
-
-  if (command === 'info') {
+  if (command === 'ping' || command === 'help' || command === 'info') {
     client.ping().then(function(data) {
       let ping = Math.floor(Math.round(data * 1000))
       let Sseconds = process.uptime()
@@ -152,10 +138,6 @@ client.on('message', (channel, tags, message, self) => {
 
   if (command === 'commands') {
     client.say(channel, `${tags.username} A list of commands can be found here NekoProud 👉 https://darkvypr.com/commands`);
-  }
-
-  if (command === 'help') {
-    client.say(channel, `Bot Info: https://darkvypr.com/info | Get a list of commands by doing !commands NekoProud`);
   }
 
   if (command === 'replit') {
@@ -203,24 +185,11 @@ client.on('message', (channel, tags, message, self) => {
 
   // Social Commands - Self Promo
 
-  if (command === 'discord') {
+  if (command === 'disc' || command === 'discord') {
     client.say(channel, `Join the homie server ${tags.username} TriHard 👉 http://idiotas.darkvypr.com`);
   }
 
-  if (command === 'disc') {
-    client.say(channel, `Join the homie server ${tags.username} TriHard 👉 http://idiotas.darkvypr.com`);
-  }
-
-  if (command === 'youtube') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
-    }
-    else {
-      client.say(channel, `${tags.username} Sub pls AYAYAsmile http://yt.darkvypr.com`);
-    }
-  }
-
-  if (command === 'yt') {
+  if (command === 'youtube'|| command === 'yt') {
     if (channel !== '#darkvypr') {
       client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
     }
@@ -241,7 +210,7 @@ client.on('message', (channel, tags, message, self) => {
     })
   }
 
-  if (command === 'github') {
+  if (command === 'github' || command === 'git') {
     if (channel !== '#darkvypr') {
       client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
     }
@@ -250,34 +219,7 @@ client.on('message', (channel, tags, message, self) => {
     }
   }
 
-  if (command === 'git') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
-    }
-    else {
-      client.say(channel, `${tags.username} peepoChat http://git.darkvypr.com`);
-    }
-  }
-
-  if (command === 'links') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
-    }
-    else {
-      client.say(channel, `${tags.username} https://darkvypr.com NekoProud`);
-    }
-  }
-
-  if (command === 'site') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
-    }
-    else {
-      client.say(channel, `${tags.username} https://darkvypr.com NekoProud`);
-    }
-  }
-
-  if (command === 'website') {
+  if (command === 'site' || command === 'website' || command === 'links') {
     if (channel !== '#darkvypr') {
       client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
     }
@@ -448,11 +390,38 @@ client.on('message', (channel, tags, message, self) => {
     }
 
     else {
-      axios.get(`https://disease.sh/v3/covid-19/countries/${args.join(' ')}`)
-        .then((response) => {
-          let coviduserquery = response.data
-          client.say(channel, `${tags.username} Stats for ${coviduserquery.country}: Today's Cases: ${coviduserquery.todayCases} | Today's Deaths: ${coviduserquery.todayDeaths} | Total Cases: ${coviduserquery.cases} | Total Deaths: ${coviduserquery.deaths}`)
-      });
+      let specificlocation = `${args.join(' ')}`
+      if(specificlocation[0] === '@') {
+        let removedatsign = specificlocation[0].replace('@', '') + specificlocation.substring(1)
+        let removedatsignlow = removedatsign.toLowerCase()
+		    db.get(`${removedatsignlow}time`).then(function(value) {
+			    let lookuptime = `${value}`
+          if(lookuptime === 'null') {
+            client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            axios.get(`https://api.tomtom.com/search/2/search/${lookuptime}.json?key=${process.env['COUNTRY_CONVERT_KEY']}`)
+            .then((response) => {
+              let convertedcountry = response.data
+              let parsedconvertedcountry = `${convertedcountry.results[0].address.country}`
+
+            axios.get(`https://disease.sh/v3/covid-19/countries/${parsedconvertedcountry}`)
+            .then((response) => {
+              let covidusercountry = response.data
+              client.say(channel, `${tags.username} Stats for ${specificlocation}'s country (${covidusercountry.country}): Today's Cases: ${covidusercountry.todayCases} | Today's Deaths: ${covidusercountry.todayDeaths} | Total Cases: ${covidusercountry.cases} | Total Deaths: ${covidusercountry.deaths}`)
+            });
+            });
+          }
+        })
+      }
+
+      else {
+        axios.get(`https://disease.sh/v3/covid-19/countries/${args.join(' ')}`)
+          .then((response) => {
+            let coviduserquery = response.data
+            client.say(channel, `${tags.username} Stats for ${coviduserquery.country}: Today's Cases: ${coviduserquery.todayCases} | Today's Deaths: ${coviduserquery.todayDeaths} | Total Cases: ${coviduserquery.cases} | Total Deaths: ${coviduserquery.deaths}`)
+          });
+      }
     }
   }
 
@@ -523,10 +492,6 @@ client.on('message', (channel, tags, message, self) => {
         }
       })
     }
-  }
-
-  if (command === 'echo') {
-    client.say(channel, `👥 ${args.join(' ')}`);
   }
 
   if (command === 'elischat') {
@@ -809,12 +774,8 @@ client.on('message', (channel, tags, message, self) => {
     client.say(channel, `${tags.username} DinkDonk https://regex101.com/r/WtN0Sp/12`);
   }
 
-  if (command === 'say') {
+  if (command === 'say' || command === 'echo') {
     client.say(channel, `👥 ${args.join(' ')}`);
-  }
-
-  if (command === 'siterepo') {
-    client.say(channel, `${tags.username} http://siterepo.darkvypr.com`);
   }
 
   if (command === 'specs') {
@@ -827,36 +788,47 @@ client.on('message', (channel, tags, message, self) => {
 
 	if(command === 'time') {
     if(`${args[0]}` === 'undefined') {
-		  db.get(`${tags.username}time`).then(function(value) {
-			  let senderttime = `${value}`
+      db.get(`${tags.username}time`).then(function(value) {
+        let senderttime = `${value}`
         if(senderttime === 'null') {
-          client.say(channel, (`${tags.username}, To use the "!time" command, you must first set your location with the "!setlocation" command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`))
-		    }
+          client.say(channel, `${tags.username}, Before using this command, you must set your location with the !setlocation command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`)
+        }
         else {
           axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${senderttime}`)
           .then((response) => {
             let timeresults = response.data
-            client.say(channel, (`${tags.username}, The time in ${senderttime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime}`))
+            client.say(channel, (`${tags.username}, The time in ${senderttime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime} ⌚`))
           });
         }
       })
     }
+
     else {
-      let userlookupup = `${args[0]}`
-      let userlookuplow = userlookupup.toLowerCase()
-		  db.get(`${userlookuplow}time`).then(function(value) {
-			  let lookuptime = `${value}`
-        if(lookuptime === 'null') {
-          client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
-		    }
-        else {
-          axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${lookuptime}`)
+      let specificlocation = `${args.join(' ')}`
+      if(specificlocation[0] === '@') {
+        let removedatsign = specificlocation[0].replace('@', '') + specificlocation.substring(1)
+        let removedatsignlow = removedatsign.toLowerCase()
+		    db.get(`${removedatsignlow}time`).then(function(value) {
+			    let lookuptime = `${value}`
+          if(lookuptime === 'null') {
+            client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${lookuptime}`)
+            .then((response) => {
+              let timeresults = response.data
+              client.say(channel, (`${tags.username}, ${specificlocation}'s local time: ${lookuptime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime} ⌚`))
+            });
+          }
+        })
+      }
+      else {
+        axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${args.join(' ')}`)
           .then((response) => {
             let timeresults = response.data
-            client.say(channel, (`${tags.username}, The time in ${lookuptime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime}`))
+            client.say(channel, (`${tags.username}, The time in ${args.join(' ')} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime} ⌚`))
           });
-        }
-      })
+      }
     }
   }
 
@@ -923,31 +895,31 @@ client.on('message', (channel, tags, message, self) => {
 
             if(checkcondition === 'Clear') {
               let checkedcondition = 'with clear skies ☀️🌇'
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Thunderstorm') {
               let checkedcondition = `with a ${weatherdescription} ⛈️☔`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Drizzle') {
               let checkedcondition = 'with slight rain 🌦️🌧️'
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Rain') {
               let checkedcondition = `with ${weatherdescription} 🌧️☔`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Snow') {
               let checkedcondition = `with ${weatherdescription} 🌨️❄️`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Clouds') {
               let checkedcondition = `with ${weatherdescription} ☁️🌥️`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkicon === '50d') {
               let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
           });
           });
@@ -982,31 +954,31 @@ client.on('message', (channel, tags, message, self) => {
 
              if(checkcondition === 'Clear') {
                let checkedcondition = 'with clear skies ☀️🌇'
-               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
              }
              else if(checkcondition === 'Thunderstorm') {
                 let checkedcondition = `with a ${weatherdescription} ⛈️☔`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Drizzle') {
                 let checkedcondition = 'with slight rain 🌦️🌧️'
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Rain') {
                 let checkedcondition = `with ${weatherdescription} 🌧️☔`
-               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Snow') {
                 let checkedcondition = `with ${weatherdescription} 🌨️❄️`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Clouds') {
                 let checkedcondition = `with ${weatherdescription} ☁️🌥️`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkicon === '50d') {
                 let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
             });
             });
@@ -1031,31 +1003,31 @@ client.on('message', (channel, tags, message, self) => {
 
           if(checkcondition === 'Clear') {
             let checkedcondition = 'with clear skies ☀️🌇'
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Thunderstorm') {
             let checkedcondition = `with a ${weatherdescription} ⛈️☔`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Drizzle') {
             let checkedcondition = 'with slight rain 🌦️🌧️'
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Rain') {
             let checkedcondition = `with ${weatherdescription} 🌧️☔`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Snow') {
             let checkedcondition = `with ${weatherdescription} 🌨️❄️`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Clouds') {
             let checkedcondition = `with ${weatherdescription} ☁️🌥️`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkicon === '50d') {
             let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C ${checkedcondition}.`)
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
         });
         });
@@ -1115,10 +1087,15 @@ client.on('message', (channel, tags, message, self) => {
     else {
       db.get(`${tags.username}nammers`).then(function(value) {
 			  let nammers = `${value}`
-          if(nammers === 'null') {
+          if(nammers === 'null' || nammers === 'NaN') {
             let nammeramount = getRandomInt(30)
             db.set(`${tags.username}nammers`, nammeramount)
             (client.say(channel, (`${tags.username} --> KKona 👋 This is your first time hunting! You caught ${nammeramount} nammers, and have a balance of: ${nammeramount} nammers. GearSmile Stab`)))
+
+            talkedRecently.add(`${tags.username}`);
+            setTimeout(() => {
+              talkedRecently.delete(`${tags.username}`);
+            }, 3600000);
 		      }
           else { 
             let nammeramount = getRandomInt(30)
@@ -1172,46 +1149,6 @@ client.on('message', (channel, tags, message, self) => {
 		    }
         else {
           client.say(channel, (`${tags.username} --> NOTED You have ${nammers} nammers. Get some by typing "!hunt", and kill some by typing "!kill {amount}".`))
-        }
-      })
-  }
-
-  if(command === 'give') {
-		db.get(`${tags.username}nammers`).then(function(value) {
-			let nammers = `${value}`
-        if(nammers === 'null') {
-          client.say(channel, (`${tags.username} --> GearScare ⛔ It looks like you dont have any nammers to give away! Use "!hunt" to get more. ppOverheat`))
-		    }
-        else {
-          let giveamount = `${args[1]}`
-          let recipientup = `${args[0]}`
-          let recipient = recipientup.toLowerCase()
-          if(+`${giveamount}` > +`${nammers}`) {
-            client.say(channel, (`${tags.username} --> GearScare ⛔ You tried to give away ${giveamount} nammers, but you only have ${nammers} nammers. You keep all of your nammers for a rainy day.`))
-          }
-          else {
-            db.get(`${recipient}nammers`).then(function(valuerecipient) {
-              let recipientnammers = `${valuerecipient}`
-
-              if(`${recipientnammers}` === 'null') {
-                client.say(channel, `${tags.username} --> That user doesn't exist in the database!`)
-              }
-
-              else {
-                if(+`${giveamount}` <= 0) {
-                  client.say(channel, (`${tags.username} --> Nice try NekoStare`))
-                }
-                else {
-                  let aftergive = +nammers - +giveamount
-                  db.set(`${tags.username}nammers`, aftergive)
-                  let recipientaddednammers = +recipientnammers + +giveamount
-
-                  db.set(`${recipient}nammers`, recipientaddednammers)
-                  client.say(channel, `${tags.username} --> GearSmile 👉 🚢 Successfully shipped ${giveamount} nammers to ${recipient}! Your new balance is: ${aftergive} nammers, and ${recipient}'s new balance is: ${recipientaddednammers} nammers!`)
-                }
-              }
-            })
-          }
         }
       })
   }
