@@ -1,4 +1,4 @@
-  if (command === 'ping') {
+  if (command === 'ping' || command === 'help' || command === 'info') {
     client.ping().then(function(data) {
       let ping = Math.floor(Math.round(data * 1000))
       let Sseconds = process.uptime()
