@@ -22,10 +22,37 @@
     }
 
     else {
-      axios.get(`https://disease.sh/v3/covid-19/countries/${args.join(' ')}`)
-        .then((response) => {
-          let coviduserquery = response.data
-          client.say(channel, `${tags.username} Stats for ${coviduserquery.country}: Today's Cases: ${coviduserquery.todayCases} | Today's Deaths: ${coviduserquery.todayDeaths} | Total Cases: ${coviduserquery.cases} | Total Deaths: ${coviduserquery.deaths}`)
-      });
+      let specificlocation = `${args.join(' ')}`
+      if(specificlocation[0] === '@') {
+        let removedatsign = specificlocation[0].replace('@', '') + specificlocation.substring(1)
+        let removedatsignlow = removedatsign.toLowerCase()
+		    db.get(`${removedatsignlow}time`).then(function(value) {
+			    let lookuptime = `${value}`
+          if(lookuptime === 'null') {
+            client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            axios.get(`https://api.tomtom.com/search/2/search/${lookuptime}.json?key=${process.env['COUNTRY_CONVERT_KEY']}`)
+            .then((response) => {
+              let convertedcountry = response.data
+              let parsedconvertedcountry = `${convertedcountry.results[0].address.country}`
+
+            axios.get(`https://disease.sh/v3/covid-19/countries/${parsedconvertedcountry}`)
+            .then((response) => {
+              let covidusercountry = response.data
+              client.say(channel, `${tags.username} Stats for ${specificlocation}'s country (${covidusercountry.country}): Today's Cases: ${covidusercountry.todayCases} | Today's Deaths: ${covidusercountry.todayDeaths} | Total Cases: ${covidusercountry.cases} | Total Deaths: ${covidusercountry.deaths}`)
+            });
+            });
+          }
+        })
+      }
+
+      else {
+        axios.get(`https://disease.sh/v3/covid-19/countries/${args.join(' ')}`)
+          .then((response) => {
+            let coviduserquery = response.data
+            client.say(channel, `${tags.username} Stats for ${coviduserquery.country}: Today's Cases: ${coviduserquery.todayCases} | Today's Deaths: ${coviduserquery.todayDeaths} | Total Cases: ${coviduserquery.cases} | Total Deaths: ${coviduserquery.deaths}`)
+          });
+      }
     }
   }
