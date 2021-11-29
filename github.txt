@@ -1,4 +1,4 @@
-  if (command === 'github') {
+  if (command === 'github' || command === 'git') {
     if (channel !== '#darkvypr') {
       client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
     }
