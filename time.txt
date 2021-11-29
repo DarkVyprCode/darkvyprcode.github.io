@@ -1,34 +1,45 @@
 	if(command === 'time') {
     if(`${args[0]}` === 'undefined') {
-		  db.get(`${tags.username}time`).then(function(value) {
-			  let senderttime = `${value}`
+      db.get(`${tags.username}time`).then(function(value) {
+        let senderttime = `${value}`
         if(senderttime === 'null') {
-          client.say(channel, (`${tags.username}, To use the "!time" command, you must first set your location with the "!setlocation" command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`))
-		    }
+          client.say(channel, `${tags.username}, Before using this command, you must set your location with the !setlocation command. Example: “!setlocation lasalle ontario”, “!setlocation springfield virginia” or “!setlocation stockholm sweden”. More info: https://darkvypr.com/commands`)
+        }
         else {
           axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${senderttime}`)
           .then((response) => {
             let timeresults = response.data
-            client.say(channel, (`${tags.username}, The time in ${senderttime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime}`))
+            client.say(channel, (`${tags.username}, The time in ${senderttime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime} ⌚`))
           });
         }
       })
     }
+
     else {
-      let userlookupup = `${args[0]}`
-      let userlookuplow = userlookupup.toLowerCase()
-		  db.get(`${userlookuplow}time`).then(function(value) {
-			  let lookuptime = `${value}`
-        if(lookuptime === 'null') {
-          client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
-		    }
-        else {
-          axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${lookuptime}`)
+      let specificlocation = `${args.join(' ')}`
+      if(specificlocation[0] === '@') {
+        let removedatsign = specificlocation[0].replace('@', '') + specificlocation.substring(1)
+        let removedatsignlow = removedatsign.toLowerCase()
+		    db.get(`${removedatsignlow}time`).then(function(value) {
+			    let lookuptime = `${value}`
+          if(lookuptime === 'null') {
+            client.say(channel, (`${tags.username}, That user hasen't set their location! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${lookuptime}`)
+            .then((response) => {
+              let timeresults = response.data
+              client.say(channel, (`${tags.username}, ${specificlocation}'s local time: ${lookuptime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime} ⌚`))
+            });
+          }
+        })
+      }
+      else {
+        axios.get(`https://timezone.abstractapi.com/v1/current_time/?api_key=${process.env['TIME_KEY']}&location=${args.join(' ')}`)
           .then((response) => {
             let timeresults = response.data
-            client.say(channel, (`${tags.username}, The time in ${lookuptime} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime}`))
+            client.say(channel, (`${tags.username}, The time in ${args.join(' ')} (${timeresults.timezone_abbreviation}) is: ${timeresults.datetime} ⌚`))
           });
-        }
-      })
+      }
     }
   }
