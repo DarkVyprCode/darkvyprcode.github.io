@@ -80,7 +80,7 @@ client.on('message', (channel, tags, message, self) => {
     if (`${tags.username}` === 'darkvypr') {
       db.get(`${args[0]}`).then(function(value) {
         let valueofkey = `${value}`
-        client.say(channel, (`${tags.username}, Succesfully deleted the key: "${args[0]}" with the value: "${valueofkey}" from the database! MODS`))
+        client.say(channel, (`${tags.username}, Succesfully deleted the key: "${args[0]}" with the value: "${valueofkey}" MODS`))
         db.delete(`${args[0]}`)
       })
     }
@@ -92,7 +92,7 @@ client.on('message', (channel, tags, message, self) => {
   if (command === 'datacreate') {
     if (`${tags.username}` === 'darkvypr') {
       db.set(`${args[0]}`, `${args[1]}`);
-      client.say(channel, `${tags.username}, Succesfully added the key: "${args[0]}" with the value: "${args[1]}" to the database! NOTED`)
+      client.say(channel, `${tags.username}, Succesfully added the key: "${args[0]}" with the value: "${args[1]}" NOTED`)
     }
     else {
       client.say(channel, `Whoops! ${tags.username}, you don't have the required permission to use that command!`);
@@ -102,7 +102,7 @@ client.on('message', (channel, tags, message, self) => {
   if (command === 'datainspect') {
     if (`${tags.username}` === 'darkvypr') {
       db.get(`${args[0]}`).then(function(value) {
-        client.say(channel, (`${tags.username}, The key: "${args[0]}" has a value of: "${value}". NOTED`))
+        client.say(channel, (`${tags.username}, Key: "${args[0]}" Value: "${value}". NOTED`))
       })
     }
     else {
@@ -744,11 +744,19 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if (command === 'plop7') {
-    client.say(channel, `${tags.username} https://i.imgur.com/g7vIKbC.png `);
+    client.say(channel, `${tags.username} https://i.imgur.com/g7vIKbC.png`);
   }
 
   if (command === 'plop8') {
-    client.say(channel, `${tags.username} https://i.imgur.com/gBoJaoD.png `);
+    client.say(channel, `${tags.username} https://i.imgur.com/gBoJaoD.png`);
+  }
+
+  if (command === 'plop9') {
+    client.say(channel, `${tags.username} https://i.imgur.com/vKyWwTE.png`);
+  }
+
+  if (command === 'plop10') {
+    client.say(channel, `${tags.username} https://i.imgur.com/tPNuJ4r.png`);
   }
 
   if (command === 'plopcolour') {
@@ -904,31 +912,38 @@ client.on('message', (channel, tags, message, self) => {
 
             if(checkcondition === 'Clear') {
               let checkedcondition = 'with clear skies ☀️🌇'
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Thunderstorm') {
               let checkedcondition = `with a ${weatherdescription} ⛈️☔`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Drizzle') {
               let checkedcondition = 'with slight rain 🌦️🌧️'
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Rain') {
               let checkedcondition = `with ${weatherdescription} 🌧️☔`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Snow') {
               let checkedcondition = `with ${weatherdescription} 🌨️❄️`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkcondition === 'Clouds') {
               let checkedcondition = `with ${weatherdescription} ☁️🌥️`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
             else if(checkicon === '50d' || checkicon === '50n') {
-              let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+              let checkedcondition = `with a special weather event: ${checkcondition} 🔍`
+              let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
             }
           });
           });
@@ -963,31 +978,38 @@ client.on('message', (channel, tags, message, self) => {
 
              if(checkcondition === 'Clear') {
                let checkedcondition = 'with clear skies ☀️🌇'
-               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+               let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
              }
              else if(checkcondition === 'Thunderstorm') {
                 let checkedcondition = `with a ${weatherdescription} ⛈️☔`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+                let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Drizzle') {
                 let checkedcondition = 'with slight rain 🌦️🌧️'
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+                let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Rain') {
                 let checkedcondition = `with ${weatherdescription} 🌧️☔`
-               client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+                let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Snow') {
                 let checkedcondition = `with ${weatherdescription} 🌨️❄️`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+                let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkcondition === 'Clouds') {
                 let checkedcondition = `with ${weatherdescription} ☁️🌥️`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+                let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
               else if(checkicon === '50d' || checkicon === '50n') {
-                let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
-                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+                let checkedcondition = `with a special weather event: ${checkcondition} 🔍`
+                let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+                client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
               }
             });
             });
@@ -1012,31 +1034,38 @@ client.on('message', (channel, tags, message, self) => {
 
           if(checkcondition === 'Clear') {
             let checkedcondition = 'with clear skies ☀️🌇'
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Thunderstorm') {
             let checkedcondition = `with a ${weatherdescription} ⛈️☔`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Drizzle') {
             let checkedcondition = 'with slight rain 🌦️🌧️'
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Rain') {
             let checkedcondition = `with ${weatherdescription} 🌧️☔`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Snow') {
             let checkedcondition = `with ${weatherdescription} 🌨️❄️`
-              client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkcondition === 'Clouds') {
             let checkedcondition = `with ${weatherdescription} ☁️🌥️`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
           else if(checkicon === '50d' || checkicon === '50n') {
-            let checkedcondition = `with a special weather event: ${weatherdescription} 🔍`
-            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${weatherresults.main.temp}°C (Feels like: ${weatherresults.main.feels_like}°C) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
+            let checkedcondition = `with a special weather event: ${checkcondition} 🔍`
+            let toFahrenheit = +`${weatherresults.main.temp}` * 1.8 + 32
+            client.say(channel, `${tags.username}, The temperature in ${namefromapi} is currently ${Math.round(weatherresults.main.temp)}°C (${Math.round(toFahrenheit)}°F) ${checkedcondition}. Wind speed: ${weatherresults.wind.speed} meters/s. 💨 Humidity: ${weatherresults.main.humidity}% 💧`)
           }
         });
         });
@@ -1135,31 +1164,91 @@ client.on('message', (channel, tags, message, self) => {
             client.say(channel, (`${tags.username} --> MenheraCry You try to kill ${args[0]} nammers, but realize that you only have ${nammers} nammers, and give up.`))
           }
           else {
-            let beforekill = nammers
             let killamount = `${args[0]}`
-            if(+`${killamount}` <= 0) {
-              client.say(channel, (`${tags.username} --> Nice try NekoStare`))
-            }
-            else {
+            const regex = new RegExp('^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$');
+            testForNumber = `${regex.test(killamount)}`
+
+            if(testForNumber === 'true') {
               let afterkill = +nammers - +killamount
               db.set(`${tags.username}nammers`, afterkill)
-              client.say(channel, (`${tags.username} --> NekoProud 🔪 You brutally execute ${args[0]} nammers, and are left with ${afterkill} nammers.`))
+              client.say(channel, (`${tags.username} --> NekoProud 🔪 You brutally execute ${killamount} nammers, and are left with ${afterkill} nammers.`))
+            }
+            else {
+              client.say(channel, (`${tags.username} --> Please enter a valid amount of weebs to kill KannaSip`))
             }
           }
         }
-      })
+    })
   }
 
   if(command === 'nammers') {
-		db.get(`${tags.username}nammers`).then(function(value) {
-			let nammers = `${value}`
+    if(`${args[0]}` === 'undefined') {
+      db.get(`${tags.username}nammers`).then(function(value) {
+        let nammers = `${value}`
+          if(nammers === 'null') {
+            client.say(channel, (`${tags.username} --> GearScare ⛔ You don't have any nammers! Get some by typing "!hunt", and kill some by typing "!kill {amount}"!`))
+          }
+          else {
+            client.say(channel, (`${tags.username} --> NOTED You have ${nammers} nammers. Get some by typing "!hunt", and kill some by typing "!kill {amount}".`))
+          }
+      })
+    }
+    else {
+      let checkuser = `${args[0]}`.toLowerCase()
+      db.get(`${checkuser}nammers`).then(function(value) {
+        let nammers = `${value}`
+          if(nammers === 'null') {
+            client.say(channel, (`${tags.username} --> GearScare ⛔ That user dosent exist!`))
+          }
+          else {
+            client.say(channel, (`${tags.username} --> NOTED ${args[0]} has ${nammers} nammers.`))
+          }
+      })
+    }
+  }
+
+  if(command === 'give') {
+    let giveamount = `${args[1]}`
+    const regex = new RegExp('^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$');
+    testForNumber = `${regex.test(giveamount)}`
+
+    let recipientup = `${args[0]}`
+    let recipient = recipientup.toLowerCase()
+
+    if(`${recipient}` === `${tags.username}`) {
+      client.say(channel, (`${tags.username} --> Why are you trying to give weebs to urself mf NekoStare`))
+    }
+
+    else if(`${testForNumber}` === 'true') {
+      db.get(`${tags.username}nammers`).then(function(value) {
+        let nammers = `${value}`
         if(nammers === 'null') {
-          client.say(channel, (`${tags.username} --> GearScare ⛔ You don't have any nammers! Get some by typing "!hunt", and kill some by typing "!kill {amount}"!`))
-		    }
+          client.say(channel, (`${tags.username} --> GearScare ⛔ It looks like you dont have any nammers to give away! Use "!hunt" to get more. ppOverheat`))
+        }
+        else if(+`${giveamount}` > +`${nammers}`) {
+          client.say(channel, (`${tags.username} --> GearScare ⛔ You tried to give away ${giveamount} nammers, but you only have ${nammers} nammers. You keep all of your nammers for a rainy day.`))
+        }
         else {
-          client.say(channel, (`${tags.username} --> NOTED You have ${nammers} nammers. Get some by typing "!hunt", and kill some by typing "!kill {amount}".`))
+          db.get(`${recipient}nammers`).then(function(valuerecipient) {
+            let recipientnammers = `${valuerecipient}`
+            if(`${recipientnammers}` === 'null') {
+              client.say(channel, `${tags.username} --> That user dosen't exist in the database!`)
+            }
+            else {
+              let aftergive = +nammers - +giveamount
+              db.set(`${tags.username}nammers`, aftergive)
+              let recipientaddednammers = +recipientnammers + +giveamount
+
+              db.set(`${recipient}nammers`, recipientaddednammers)
+              client.say(channel, `${tags.username} --> GearSmile 👉 🚢 Successfully shipped ${giveamount} nammers to ${recipient}! Your new balance is: ${aftergive} nammers, and ${recipient}'s new balance is: ${recipientaddednammers} nammers!`)
+            }
+          })
         }
       })
+    }
+    else {
+      client.say(channel, (`${tags.username} --> Please enter a valid amount of weebs to give away!`))
+    }
   }
 
 });
