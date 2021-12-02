@@ -1,0 +1,25 @@
+  if(command === 'nammers') {
+    if(`${args[0]}` === 'undefined') {
+      db.get(`${tags.username}nammers`).then(function(value) {
+        let nammers = `${value}`
+          if(nammers === 'null') {
+            client.say(channel, (`${tags.username} --> GearScare ⛔ You don't have any nammers! Get some by typing "!hunt", and kill some by typing "!kill {amount}"!`))
+          }
+          else {
+            client.say(channel, (`${tags.username} --> NOTED You have ${nammers} nammers. Get some by typing "!hunt", and kill some by typing "!kill {amount}".`))
+          }
+      })
+    }
+    else {
+      let checkuser = `${args[0]}`.toLowerCase()
+      db.get(`${checkuser}nammers`).then(function(value) {
+        let nammers = `${value}`
+          if(nammers === 'null') {
+            client.say(channel, (`${tags.username} --> GearScare ⛔ That user dosent exist!`))
+          }
+          else {
+            client.say(channel, (`${tags.username} --> NOTED ${args[0]} has ${nammers} nammers.`))
+          }
+      })
+    }
+  }
