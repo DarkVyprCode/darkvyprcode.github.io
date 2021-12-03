@@ -1,12 +1,12 @@
   if (command === 'coin') {
-    axios.get(`https://customapi.aidenwallis.co.uk/api/v1/misc/coinflip`)
-      .then((response) => {
-        let flipresult = response.data
-        if (flipresult === 'Heads') {
-          client.say(channel, `${tags.username} Result of your coin flip: "Heads!" (Yes)`);
-        }
-        else {
-          client.say(channel, `${tags.username} Result of your coin flip: "Tails!" (No)`);
-        }
-      });
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+    let flipresult = getRandomInt(5)
+    if (flipresult <= 2) {
+      client.say(channel, `${tags.username} Result of your coin flip: "Heads!" (Yes)`);
+    }
+    else {
+        client.say(channel, `${tags.username} Result of your coin flip: "Tails!" (No)`);
+    }
   }
