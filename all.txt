@@ -350,16 +350,16 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if (command === 'coin') {
-    axios.get(`https://customapi.aidenwallis.co.uk/api/v1/misc/coinflip`)
-      .then((response) => {
-        let flipresult = response.data
-        if (flipresult === 'Heads') {
-          client.say(channel, `${tags.username} Result of your coin flip: "Heads!" (Yes)`);
-        }
-        else {
-          client.say(channel, `${tags.username} Result of your coin flip: "Tails!" (No)`);
-        }
-      });
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+    let flipresult = getRandomInt(5)
+    if (flipresult <= 2) {
+      client.say(channel, `${tags.username} Result of your coin flip: "Heads!" (Yes)`);
+    }
+    else {
+        client.say(channel, `${tags.username} Result of your coin flip: "Tails!" (No)`);
+    }
   }
 
   if (command === 'coomer') {
@@ -1174,7 +1174,7 @@ client.on('message', (channel, tags, message, self) => {
               client.say(channel, (`${tags.username} --> NekoProud 🔪 You brutally execute ${killamount} nammers, and are left with ${afterkill} nammers.`))
             }
             else {
-              client.say(channel, (`${tags.username} --> Please enter a valid amount of weebs to kill KannaSip`))
+              client.say(channel, (`${tags.username} --> Please enter a valid amount of nammers to kill KannaSip`))
             }
           }
         }
@@ -1216,7 +1216,7 @@ client.on('message', (channel, tags, message, self) => {
     let recipient = recipientup.toLowerCase()
 
     if(`${recipient}` === `${tags.username}`) {
-      client.say(channel, (`${tags.username} --> Why are you trying to give weebs to urself mf NekoStare`))
+      client.say(channel, (`${tags.username} --> Why are you trying to give nammers to urself mf NekoStare`))
     }
 
     else if(`${testForNumber}` === 'true') {
@@ -1247,7 +1247,7 @@ client.on('message', (channel, tags, message, self) => {
       })
     }
     else {
-      client.say(channel, (`${tags.username} --> Please enter a valid amount of weebs to give away!`))
+      client.say(channel, (`${tags.username} --> Please enter a valid amount of nammers to give away!`))
     }
   }
 
