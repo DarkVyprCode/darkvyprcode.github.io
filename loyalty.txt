@@ -13,9 +13,9 @@
       db.get(`${tags.username}nammers`).then(function(value) {
 			  let nammers = `${value}`
           if(nammers === 'null' || nammers === 'NaN') {
-            let nammeramount = getRandomInt(30)
+            let nammeramount = Math.round(getRandomInt(30) + 20)
             db.set(`${tags.username}nammers`, nammeramount)
-            (client.say(channel, (`${tags.username} --> KKona 👋 This is your first time hunting! You caught ${nammeramount} nammers, and have a balance of: ${nammeramount} nammers. GearSmile Stab`)))
+            (client.say(channel, (`${tags.username} --> KKona 👋 You caught ${nammeramount} nammers, and have a balance of: ${nammeramount} nammers. Since this is your first time hunting, you get 20 extra. GearSmile Stab`)))
 
             talkedRecently.add(`${tags.username}`);
             setTimeout(() => {
@@ -24,17 +24,27 @@
 		      }
           else { 
             let nammeramount = getRandomInt(30)
-            console.log(nammers)
-            console.log(nammeramount)
-            let totalnammers = +nammers + nammeramount
-            console.log(totalnammers)
-            db.set(`${tags.username}nammers`, totalnammers)
-            client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${nammeramount} nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
-            
-            talkedRecently.add(`${tags.username}`);
-            setTimeout(() => {
-              talkedRecently.delete(`${tags.username}`);
-            }, 3600000);
+            if(`${tags.username}` === 'darkvypr') {
+              console.log(nammeramount)
+              let totalnammers = Math.round(+nammers + nammeramount * 1.3)
+              db.set(`${tags.username}nammers`, totalnammers)
+              client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${Math.round(nammeramount * 1.3)} (+${Math.round((nammeramount * 1.3) - nammeramount)} Owner Bonus EleGiggle ) nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
+              
+              talkedRecently.add(`${tags.username}`);
+              setTimeout(() => {
+                talkedRecently.delete(`${tags.username}`);
+              }, 1800000);
+            }
+            else {
+              let totalnammers = +nammers + nammeramount
+              db.set(`${tags.username}nammers`, totalnammers)
+              client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${nammeramount} nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
+              
+              talkedRecently.add(`${tags.username}`);
+              setTimeout(() => {
+                talkedRecently.delete(`${tags.username}`);
+              }, 3600000);
+            }
           }
       })
     }
@@ -60,8 +70,12 @@
               db.set(`${tags.username}nammers`, afterkill)
               client.say(channel, (`${tags.username} --> NekoProud 🔪 You brutally execute ${killamount} nammers, and are left with ${afterkill} nammers.`))
             }
+            else if(`${args[0]}` === 'all') {
+              db.set(`${tags.username}nammers`, 0)
+              client.say(channel, (`${tags.username} --> GearScare 🔪 You graciously mutilate all of your nammers (${nammers}), and are left with nothing.`))
+            }
             else {
-              client.say(channel, (`${tags.username} --> Please enter a valid amount of weebs to kill KannaSip`))
+              client.say(channel, (`${tags.username} --> Please enter a valid amount of nammers to kill KannaSip`))
             }
           }
         }
@@ -103,7 +117,7 @@
     let recipient = recipientup.toLowerCase()
 
     if(`${recipient}` === `${tags.username}`) {
-      client.say(channel, (`${tags.username} --> Why are you trying to give weebs to urself mf NekoStare`))
+      client.say(channel, (`${tags.username} --> Why are you trying to give nammers to urself mf NekoStare`))
     }
 
     else if(`${testForNumber}` === 'true') {
@@ -134,6 +148,6 @@
       })
     }
     else {
-      client.say(channel, (`${tags.username} --> Please enter a valid amount of weebs to give away!`))
+      client.say(channel, (`${tags.username} --> Please enter a valid amount of nammers to give away!`))
     }
   }
