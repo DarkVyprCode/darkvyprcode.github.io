@@ -856,7 +856,9 @@ client.on('message', (channel, tags, message, self) => {
           client.say(channel, `${tags.username}, Urban Dictionary does not have a definition for that word!`)
         }
         else {
-          client.say(channel, `${tags.username}, ${urbanresult.list[0].definition}`)
+          let dirtyresponse = urbanresult.list[0].definition
+          let cleanedupresponse = dirtyresponse.replace(/\[.*?\]/gim, '')
+          client.say(channel, `${tags.username} -> ${cleanedupresponse}`)
         }
       });
   }
