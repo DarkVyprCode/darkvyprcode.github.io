@@ -857,7 +857,7 @@ client.on('message', (channel, tags, message, self) => {
         }
         else {
           let dirtyresponse = urbanresult.list[0].definition
-          let cleanedupresponse = dirtyresponse.replace(/\[.*?\]/gim, '')
+          let cleanedupresponse = dirtyresponse.replace(/\[|\]/gim, '')
           client.say(channel, `${tags.username} -> ${cleanedupresponse}`)
         }
       });
