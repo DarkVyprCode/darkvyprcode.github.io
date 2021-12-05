@@ -80,7 +80,7 @@ client.on('message', (channel, tags, message, self) => {
     if (`${tags.username}` === 'darkvypr') {
       db.get(`${args[0]}`).then(function(value) {
         let valueofkey = `${value}`
-        client.say(channel, (`${tags.username}, Succesfully deleted the key: "${args[0]}" with the value: "${valueofkey}" MODS`))
+        client.say(channel, (`${tags.username}, Succesfully deleted key: "${args[0]}" value: "${valueofkey}" MODS`))
         db.delete(`${args[0]}`)
       })
     }
@@ -92,7 +92,7 @@ client.on('message', (channel, tags, message, self) => {
   if (command === 'datacreate') {
     if (`${tags.username}` === 'darkvypr') {
       db.set(`${args[0]}`, `${args[1]}`);
-      client.say(channel, `${tags.username}, Succesfully added the key: "${args[0]}" with the value: "${args[1]}" NOTED`)
+      client.say(channel, `${tags.username}, Succesfully added key: "${args[0]}"  value: "${args[1]}" NOTED`)
     }
     else {
       client.say(channel, `Whoops! ${tags.username}, you don't have the required permission to use that command!`);
@@ -190,11 +190,11 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if (command === 'youtube'|| command === 'yt') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    if (channel === '#darkvypr' || `${tags.username}` === 'darkvypr') {
+      client.say(channel, `${tags.username} Sub pls AYAYAsmile http://yt.darkvypr.com`);
     }
     else {
-      client.say(channel, `${tags.username} Sub pls AYAYAsmile http://yt.darkvypr.com`);
+      client.say(channel, `GearScare This command is only available in DarkVypr's chat ${tags.username}`);
     }
   }
 
@@ -211,20 +211,20 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if (command === 'github' || command === 'git') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    if (channel === '#darkvypr' || `${tags.username}` === 'darkvypr') {
+      client.say(channel, `${tags.username} peepoChat http://git.darkvypr.com`);
     }
     else {
-      client.say(channel, `${tags.username} peepoChat http://git.darkvypr.com`);
+      client.say(channel, `GearScare This command is only available in DarkVypr's chat ${tags.username}`); 
     }
   }
 
   if (command === 'site' || command === 'website' || command === 'links') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    if (channel === '#darkvypr' || `${tags.username}` === 'darkvypr') {
+      client.say(channel, `${tags.username} https://darkvypr.com NekoProud`);
     }
     else {
-      client.say(channel, `${tags.username} https://darkvypr.com NekoProud`);
+      client.say(channel, `GearScare This command is only available in DarkVypr's chat ${tags.username}`);
     }
   }
 
@@ -495,11 +495,11 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if (command === 'elischat') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    if (channel === '#darkvypr' || `${tags.username}` === 'darkvypr') {
+      client.say(channel, `${tags.username} https://i.imgur.com/J3qKoiZ.png`);
     }
     else {
-      client.say(channel, `${tags.username} https://i.imgur.com/J3qKoiZ.png`);
+      client.say(channel, `GearScare This command is only available in DarkVypr's chat ${tags.username}`);
     }
   }
 
@@ -787,7 +787,7 @@ client.on('message', (channel, tags, message, self) => {
   }
 
   if (command === 'request') {
-    client.say(channel, `${tags.username}, To have the bot added to your chat, ask @DarkVypr :) Before asking, make sure to read the bots panels and commands YESIDOTHINKSO`);
+    client.say(channel, `${tags.username}, I don't have a fancy request system or anything so to have the bot added to your chat, ask @DarkVypr :) Before asking, make sure to read the bots panels and commands YESIDOTHINKSO`);
   }
 
   if (command === 'say' || command === 'echo') {
@@ -1130,9 +1130,9 @@ client.on('message', (channel, tags, message, self) => {
       db.get(`${tags.username}nammers`).then(function(value) {
 			  let nammers = `${value}`
           if(nammers === 'null' || nammers === 'NaN') {
-            let nammeramount = getRandomInt(30)
+            let nammeramount = Math.round(getRandomInt(30) + 20)
             db.set(`${tags.username}nammers`, nammeramount)
-            (client.say(channel, (`${tags.username} --> KKona 👋 This is your first time hunting! You caught ${nammeramount} nammers, and have a balance of: ${nammeramount} nammers. GearSmile Stab`)))
+            (client.say(channel, (`${tags.username} --> KKona 👋 You caught ${nammeramount} nammers, and have a balance of: ${nammeramount} nammers. Since this is your first time hunting, you get 20 extra. GearSmile Stab`)))
 
             talkedRecently.add(`${tags.username}`);
             setTimeout(() => {
@@ -1141,17 +1141,27 @@ client.on('message', (channel, tags, message, self) => {
 		      }
           else { 
             let nammeramount = getRandomInt(30)
-            console.log(nammers)
-            console.log(nammeramount)
-            let totalnammers = +nammers + nammeramount
-            console.log(totalnammers)
-            db.set(`${tags.username}nammers`, totalnammers)
-            client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${nammeramount} nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
-            
-            talkedRecently.add(`${tags.username}`);
-            setTimeout(() => {
-              talkedRecently.delete(`${tags.username}`);
-            }, 3600000);
+            if(`${tags.username}` === 'darkvypr') {
+              console.log(nammeramount)
+              let totalnammers = Math.round(+nammers + nammeramount * 1.3)
+              db.set(`${tags.username}nammers`, totalnammers)
+              client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${Math.round(nammeramount * 1.3)} (+${Math.round((nammeramount * 1.3) - nammeramount)} Owner Bonus EleGiggle ) nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
+              
+              talkedRecently.add(`${tags.username}`);
+              setTimeout(() => {
+                talkedRecently.delete(`${tags.username}`);
+              }, 1800000);
+            }
+            else {
+              let totalnammers = +nammers + nammeramount
+              db.set(`${tags.username}nammers`, totalnammers)
+              client.say(channel, (`${tags.username} --> GearSmile ⛓ You caught ${nammeramount} nammers, and have a total of ${totalnammers} nammers! (1 hr cooldown)`))
+              
+              talkedRecently.add(`${tags.username}`);
+              setTimeout(() => {
+                talkedRecently.delete(`${tags.username}`);
+              }, 3600000);
+            }
           }
       })
     }
