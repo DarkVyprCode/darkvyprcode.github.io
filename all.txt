@@ -1187,6 +1187,10 @@ client.on('message', (channel, tags, message, self) => {
               db.set(`${tags.username}nammers`, afterkill)
               client.say(channel, (`${tags.username} --> NekoProud 🔪 You brutally execute ${killamount} nammers, and are left with ${afterkill} nammers.`))
             }
+            else if(`${args[0]}` === 'all') {
+              db.set(`${tags.username}nammers`, 0)
+              client.say(channel, (`${tags.username} --> GearScare 🔪 You graciously mutilate all of your nammers (${nammers}), and are left with nothing.`))
+            }
             else {
               client.say(channel, (`${tags.username} --> Please enter a valid amount of nammers to kill KannaSip`))
             }
