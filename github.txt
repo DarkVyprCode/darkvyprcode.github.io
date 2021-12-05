@@ -1,8 +1,8 @@
   if (command === 'github' || command === 'git') {
-    if (channel !== '#darkvypr') {
-      client.say(channel, `GearScare this command is only available in DarkVypr's chat ${tags.username}`);
+    if (channel === '#darkvypr' || `${tags.username}` === 'darkvypr') {
+      client.say(channel, `${tags.username} peepoChat http://git.darkvypr.com`);
     }
     else {
-      client.say(channel, `${tags.username} peepoChat http://git.darkvypr.com`);
+      client.say(channel, `GearScare This command is only available in DarkVypr's chat ${tags.username}`); 
     }
   }
