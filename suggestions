@@ -1,0 +1,86 @@
+  // Suggestions
+
+  if(command === 'vbsuggest') {
+    if(`${args[0]}` === 'undefined') {
+      client.me(channel, `${user} --> You must provide a suggestion when using this command. Example: "!suggest I would like the bot to be added to my channel."`)
+    }
+    else {
+      db.get('suggestion').then(function(value) {
+        let plusone = +value + 1
+        db.set("suggestion", plusone);
+
+        let content = `${args.join(' ')}`
+        let today = new Date().toISOString().slice(0, 10)
+        let state = 'ACTIVE'
+
+        fs.writeFile(`suggestions/ACTIVE/${userlow}_ID:${plusone}.txt`, `User: ${user} | State: ${state} | Date: ${today} | Suggestion: ${content}`, err => {})
+        client.me(channel, `${user} --> Your suggestion has been saved and will be read shortly. (ID: ${plusone})`)
+        client.whisper('darkvypr', `[New Suggestion] A new suggestion has been made: User: ${userlow} | ID: ${plusone} | Suggestion: ${content}`)
+      })
+    }
+  }
+
+  if(command === 'vbunset') {
+    if(`${args[0]}` === 'undefined') {
+      client.me(channel, `${user} --> You must provide a suggestion to unset when using this command. Example: "!suggest I would like the bot to be added to my channel."`)
+    }
+    else {
+      let suggestionid = `${args[0]}`
+      let state = 'DISMISSED BY AUTHOR'
+      let checkfile = fs.existsSync(`suggestions/ACTIVE/${userlow}_ID:${suggestionid}.txt`)
+
+      if(`${checkfile}` === 'true') {
+        fs.rename(`suggestions/ACTIVE/${userlow}_ID:${suggestionid}.txt`, `suggestions/DISMISSED/${userlow}_ID:${suggestionid}.txt`, function (err) {
+          if (err) throw err
+        })
+        client.me(channel, `${user} --> Successfully unset suggestion: ${suggestionid}`)
+      }
+      else {
+        client.me(channel, `${user} --> Invalid Command. You either didn't make this suggestion or it dosen't exist!`)
+      }
+    }
+  }
+
+  if(command === 'vbcomplete') {
+    let suggestionuser = `${args[0]}`
+    let suggestionid = `${args[1]}`
+    let suggestionstatus = `${args[2]}`
+    let suggestionreasonunsplit = `${args.join(' ')}`
+    let suggestionreasonsplit = suggestionreasonunsplit.split(" ")
+    let suggestionreason = suggestionreasonsplit.slice(3).toString().replace(/,/g, ' ')
+    if(userlow === 'darkvypr') {
+      if(`${suggestionuser.toLowerCase()}` === 'undefined') {
+        client.me(channel, `This guy dosen't even know how to use his own command LULW --> DarkVypr`)
+      }
+      else {
+        let checkfile = fs.existsSync(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`)
+        if(`${suggestionstatus.toUpperCase()}` === 'DENIED') {
+          if(`${checkfile}` === 'true') {
+            fs.rename(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, `suggestions/DENIED-CLOSED/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, function (err) {
+              if (err) throw err
+            })
+            client.me(channel, `${user} --> Successfully denied suggestion ${suggestionid}, and whispered the user.`)
+            client.whisper(suggestionuser.toLowerCase(), `[Suggestion Update] Your suggestion with the ID:${suggestionid} was denied! Reason: ${suggestionreason}`)
+          }
+          else {
+            client.me(channel, `${user} --> Suggestion dosen't exist or invalid syntax! ⛔ Usage: !vbcomplete {user} {id} {completed|approved|denied}`)
+          }
+        }
+        else {
+          if(`${checkfile}` === 'true') {
+            fs.rename(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, `suggestions/COMPLETED/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, function (err) {
+              if (err) throw err
+            })
+            client.me(channel, `${user} --> Successfully approved suggestion ${suggestionid}, and whispered the user.`)
+            client.whisper(suggestionuser.toLowerCase(), `[Suggestion Update] Your suggestion with the ID:${suggestionid} was approved! Reason: ${suggestionreason}`)
+          }
+          else {
+            client.me(channel, `${user} --> Suggestion dosen't exist or invalid syntax! ⛔ Usage: !vbcomplete {user} {id} {completed|approved|denied}.`)
+          }
+        }
+      }
+    }
+    else {
+      client.me(channel, `Whoops! ${user} --> you don't have the required permission to use that command!`);
+    }
+  }
