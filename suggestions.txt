@@ -1,5 +1,3 @@
-  // Suggestions
-
   if(command === 'vbsuggest') {
     if(`${args[0]}` === 'undefined') {
       client.me(channel, `${user} --> You must provide a suggestion when using this command. Example: "!suggest I would like the bot to be added to my channel."`)
@@ -22,7 +20,7 @@
 
   if(command === 'vbunset') {
     if(`${args[0]}` === 'undefined') {
-      client.me(channel, `${user} --> You must provide a suggestion to unset when using this command. Example: "!suggest I would like the bot to be added to my channel."`)
+      client.me(channel, `${user} --> You must provide a suggestion to unset when using this command. Example: "!unset 10" would unset the suggestion with the ID of '10'.`)
     }
     else {
       let suggestionid = `${args[0]}`
@@ -56,6 +54,7 @@
         let checkfile = fs.existsSync(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`)
         if(`${suggestionstatus.toUpperCase()}` === 'DENIED') {
           if(`${checkfile}` === 'true') {
+            fs.writeFile(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, ` | Reason: ${suggestionreason}`, { flag: 'a+' }, err => {})
             fs.rename(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, `suggestions/DENIED-CLOSED/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, function (err) {
               if (err) throw err
             })
@@ -68,6 +67,7 @@
         }
         else {
           if(`${checkfile}` === 'true') {
+            fs.writeFile(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, ` | Reason: ${suggestionreason}`, { flag: 'a+' }, err => {})
             fs.rename(`suggestions/ACTIVE/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, `suggestions/COMPLETED/${suggestionuser.toLowerCase()}_ID:${suggestionid}.txt`, function (err) {
               if (err) throw err
             })
