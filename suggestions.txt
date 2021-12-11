@@ -1,3 +1,5 @@
+  // Suggestions
+
   if(command === 'vbsuggest') {
     if(`${args[0]}` === 'undefined') {
       client.me(channel, `${user} --> You must provide a suggestion when using this command. Example: "!suggest I would like the bot to be added to my channel."`)
