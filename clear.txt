@@ -1,0 +1,36 @@
+  if(command === 'clear') {
+    if(userlow === channel || userlow === 'darkvypr') {
+      let clearamount = +`${args[0]}`
+      if(clearamount > 50) {
+        client.me(channel, `${user} --> The max clear is 50!`);
+      }
+      else {
+        for( let i=clearamount; i--; )
+          client.privmsg(channel, `/clear`);
+      }
+    }
+    else {
+      let checkfile = fs.existsSync(`permissions/${channel}/permittedusers.json`)
+      if(checkfile === true) {
+        let jsonnames = fs.readJsonSync(`permissions/${channel}/permittedusers.json`)
+        let jsonnamesparsed = jsonnames.permittedusers
+        let checkifuserpermitted = jsonnamesparsed.includes(`${userlow}`)
+        if(`${checkifuserpermitted}` === 'true') {
+          let clearamount = +`${args[0]}`
+          if(clearamount > 50) {
+            client.me(channel, `${user} --> The max clear is 50!`);
+          }
+          else {
+            for( let i=clearamount; i--; )
+              client.privmsg(channel, `/clear`);
+          }
+        }
+        else {
+          client.privmsg(channel, `${user} --> You aren't permitted to use that command. Get the broadcaster to permit you and try again! Hint: !permit {username_here}`)
+        }
+      }
+      else {
+        client.privmsg(channel, `${user} --> You aren't permitted to use that command. Get the broadcaster to permit you and try again! Hint: !permit {username_here}`)
+      }
+    }
+  }
