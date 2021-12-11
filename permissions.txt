@@ -1,0 +1,61 @@
+  // Permission System
+
+  if(command === 'vbpermit') {
+    if(channel === userlow || userlow === 'darkvypr') {
+      let doesuserhavepermits = fs.existsSync(`permissions/${channel}`)
+
+      if(doesuserhavepermits === true) {
+        let usertopermit = args[0]
+        let existingjson = fs.readJsonSync(`permissions/${channel}/permittedusers.json`)
+        let existingadded = existingjson.permittedusers + ' ' + usertopermit.toLowerCase().trim()
+        let tojsonadded = JSON.stringify({permittedusers: existingadded})
+        fs.writeFileSync(`permissions/${channel}/permittedusers.json`, tojsonadded)
+        client.me(channel, `${user} --> Successfully allowed user "${usertopermit}" to use all permissible commands.`)
+      }
+      else {
+        fs.ensureFileSync(`permissions/${channel}/permittedusers.json`)
+        fs.writeFileSync(`permissions/${channel}/permittedusers.json`, `{"permittedusers":"darkvypr"}`)
+        let usertopermit = args[0]
+        let existingjson = fs.readJsonSync(`permissions/${channel}/permittedusers.json`)
+        let existingadded = existingjson.permittedusers + ' ' + usertopermit.toLowerCase().trim()
+        let tojsonadded = JSON.stringify({permittedusers: existingadded})
+        fs.writeFileSync(`permissions/${channel}/permittedusers.json`, tojsonadded)
+        client.me(channel, `${user} --> Successfully allowed user "${usertopermit}" to use all permissible commands.`)
+      }
+    }
+    else {
+      client.me(channel, `Whoops! ${user} --> You need to be a channel owner to use that command. PANIC`);
+    }
+  }
+
+  if(command === 'vbunpermit') {
+    if(channel === userlow || userlow === 'darkvypr') {
+      let doesuserhavepermits = fs.existsSync(`permissions/${channel}`)
+
+      if(doesuserhavepermits === true) {
+        let usertounpermit = args[0]
+        let existingjson = fs.readJsonSync(`permissions/${channel}/permittedusers.json`)
+        let permitteduserslist = existingjson.permittedusers
+        let removeduserpermit = permitteduserslist.replace(`${usertounpermit.toLowerCase()}`, '')
+        let removeduserandspaces = removeduserpermit.replace(/\s\s+/g, ' ').trim()
+        let tojsonremoved = JSON.stringify({permittedusers: removeduserandspaces})
+        fs.writeFileSync(`permissions/${channel}/permittedusers.json`, tojsonremoved)
+        client.me(channel, `${user} --> Successfully removed user "${usertounpermit}" from the list of permitted users in this channel (#${channel})!`)
+      }
+      else {
+        fs.ensureFileSync(`permissions/${channel}/permittedusers.json`)
+        fs.writeFileSync(`permissions/${channel}/permittedusers.json`, `{"permittedusers":"darkvypr"}`)
+        let usertounpermit = args[0]
+        let existingjson = fs.readJsonSync(`permissions/${channel}/permittedusers.json`)
+        let permitteduserslist = existingjson.permittedusers
+        let removeduserpermit = permitteduserslist.replace(`${usertounpermit.toLowerCase()}`, '')
+        let removeduserandspaces = removeduserpermit.replace(/\s\s+/g, ' ').trim()
+        let tojsonremoved = JSON.stringify({permittedusers: removeduserandspaces})
+        fs.writeFileSync(`permissions/${channel}/permittedusers.json`, tojsonremoved)
+        client.me(channel, `${user} --> Successfully removed user "${usertounpermit}" from the list of permitted users in this channel (#${channel})!`)
+      }
+    }
+    else {
+      client.say(channel, `Whoops! ${user} --> You need to be a channel owner to use that command. PANIC`);
+    }
+  }
