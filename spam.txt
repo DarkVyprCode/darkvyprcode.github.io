@@ -1,0 +1,38 @@
+  if(command === 'spam') {
+    if(userlow === channel || userlow === 'darkvypr') {
+      let spamamount = +`${args[0]}`
+      if(spamamount > 50) {
+        client.me(channel, `${user} --> The max spam is 50 messages!`);
+      }
+      else {
+        let cleanedupresponse = args.join(' ').replace(/[1-9][0-9]?|50/, '')
+        for( let i=spamamount; i--; )
+          client.privmsg(channel, `${cleanedupresponse}`);
+      }
+    }
+    else {
+      let checkfile = fs.existsSync(`permissions/${channel}/permittedusers.json`)
+      if(checkfile === true) {
+        let jsonnames = fs.readJsonSync(`permissions/${channel}/permittedusers.json`)
+        let jsonnamesparsed = jsonnames.permittedusers
+        let checkifuserpermitted = jsonnamesparsed.includes(`${userlow}`)
+        if(`${checkifuserpermitted}` === 'true') {
+          let spamamount = +`${args[0]}`
+          if(spamamount > 50) {
+            client.me(channel, `${user} --> The max spam is 50 messages!`);
+          }
+          else {
+            let cleanedupresponse = args.join(' ').replace(/[1-9][0-9]?|50/, '')
+            for( let i=spamamount; i--; )
+              client.privmsg(channel, `${cleanedupresponse}`);
+          }
+        }
+        else {
+          client.privmsg(channel, `${user} --> You aren't permitted to use that command. Get the broadcaster to permit you and try again! Hint: !permit {username_here}`)
+        }
+      }
+      else {
+        client.privmsg(channel, `${user} --> You aren't permitted to use that command. Get the broadcaster to permit you and try again! Hint: !permit {username_here}`)
+      }
+    }
+  }
