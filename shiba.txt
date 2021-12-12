@@ -1,0 +1,7 @@
+  if(command === 'shiba') {
+    axios.get(`http://shibe.online/api/shibes?count=1&httpsUrls=true`)
+      .then((response) => {
+        let shibaresult = response.data
+        client.me(channel, `${user} --> Random Shiba: ${shibaresult}`);
+      });
+  }
