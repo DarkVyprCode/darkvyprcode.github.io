@@ -1,19 +1,128 @@
-  if(command === 'birthday') {
+	if(command === 'birthday' || command === 'bday') {
     if(`${args[0]}` === 'undefined') {
-      db.get(`${tags.username}bday`).then(function(value) {
-        let bdayvalue = `${value}`
-        if(bdayvalue === 'null') {
-          client.say(channel, `${tags.username}, To use the "!birthday" command, you must first set your birthday with the "!setbirthday" command. Example: "!setbirthday August 14". More info: https://darkvypr.com/commands`)
+      db.get(`${userlow}bday`).then(function(value) {
+        let senderbday = `${value}`
+        if(senderbday === 'null') {
+          client.me(channel, `${user} --> Before using this command, you must set your birthday with the !setbirthday command. Examples: "!setbirthday 8/14/2005", "!setbirthday 10/16/2004" or "!setbirthday 9/11/1973".`)
         }
         else {
-          client.say(channel, `${tags.username}, Your birthday is on ${bdayvalue}!`)
+          let d = new Date()
+          let day = d.getDate()
+          let month = d.getMonth()
+          let year = d.getFullYear()
+          let today = `${day}` + '/' + `${month}` + '/' + `${year}`
+          let userbday2021 = senderbday.replace(/(160[0-9]|16[1-9][0-9]|1[7-9][0-9]{2}|[2-9][0-9]{3})/g, '2021')
+
+          // AGES
+
+          let currentage = Math.floor((new Date(today).getTime() - new Date(`${senderbday}`).getTime()) / 31556952000)
+          let turningage = Math.floor(((new Date(today).getTime() - new Date(`${senderbday}`).getTime()) / 31556952000)) + 1
+
+          // TIME UNTIL
+
+          let differencebetweendays = new Date(userbday2021) - new Date(today)
+          if(differencebetweendays < 0) {
+            let timeuntilbday = 31536000000 + differencebetweendays
+            let humanizedtime = humanizeDuration(timeuntilbday, { units: ['mo', "d"], round: true })
+            let userbday2022 = senderbday.replace(/(160[0-9]|16[1-9][0-9]|1[7-9][0-9]{2}|[2-9][0-9]{3})/g, '2022')
+            client.me(channel, `${user} --> You are currently ${currentage} years old, and will be turning ${turningage} on ${userbday2022} which is in ${humanizedtime}. PauseChamp ⌚`)
+          }
+          else {
+            let humanizedtime = humanizeDuration(differencebetweendays, { units: ["mo", "d", "h", "m", "s"] })
+            if(humanizedtime === '0 seconds') {
+              client.me(channel, `${user} --> FeelsBirthdayMan❗Today is your birthday! Congrats on ${currentage} years, you have plenty more to come. catKISS 💖`)
+            }
+            else {
+              client.me(channel, `${user} --> You are currently ${currentage} years old, and will be turning ${turningage} on ${userbday2021} which is in ${humanizedtime}. PauseChamp ⌚`)
+            }
+          }
         }
       })
     }
+
     else {
-      db.get(`${args[0]}bday`).then(function(value) {
-        let bdayvalue = `${value}`
-        client.say(channel, `${tags.username}, ${args[0]}'s birthday is on ${bdayvalue}!`)
-      }) 
+      let specificuser = `${args[0]}`
+      if(specificuser[0] === '@') {
+        let removedatsign = specificuser[0].replace('@', '') + specificuser.substring(1)
+        let removedatsignlow = removedatsign.toLowerCase()
+		    db.get(`${removedatsignlow}bday`).then(function(value) {
+			    let lookupbday = `${value}`
+          if(lookupbday === 'null') {
+            client.me(channel, (`${user} --> That user hasen't set their birthday! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            let d = new Date()
+            let day = d.getDate()
+            let month = d.getMonth()
+            let year = d.getFullYear()
+            let today = `${day}` + '/' + `${month}` + '/' + `${year}`
+            let userbday2021 = lookupbday.replace(/(160[0-9]|16[1-9][0-9]|1[7-9][0-9]{2}|[2-9][0-9]{3})/g, '2021')
+
+            // AGES
+
+            let currentage = Math.floor((new Date(today).getTime() - new Date(`${lookupbday}`).getTime()) / 31556952000)
+            let turningage = Math.floor(((new Date(today).getTime() - new Date(`${lookupbday}`).getTime()) / 31556952000)) + 1
+
+            // TIME UNTIL
+
+            let differencebetweendays = new Date(userbday2021) - new Date(today)
+            if(differencebetweendays < 0) {
+              let timeuntilbday = 31536000000 + differencebetweendays
+              let humanizedtime = humanizeDuration(timeuntilbday, { units: ['mo', "d"], round: true })
+              let userbday2022 = lookupbday.replace(/(160[0-9]|16[1-9][0-9]|1[7-9][0-9]{2}|[2-9][0-9]{3})/g, '2022')
+              client.me(channel, `${user} --> User ${specificuser} is ${currentage} years old, and will be turning ${turningage} on ${userbday2022} which is in ${humanizedtime}. PauseChamp ⌚`)
+            }
+            else {
+              let humanizedtime = humanizeDuration(differencebetweendays, { units: ["mo", "d", "h", "m", "s"] })
+              if(humanizedtime === '0 seconds') {
+                client.me(channel, `${user} --> FeelsBirthdayMan❗Today ${specificuser}'s' birthday! Give them a "Happy Birthday" and a congrats on turning ${currentage}. catKISS 💖`)
+              }
+              else {
+                client.me(channel, `${user} --> User ${specificuser} is ${currentage} years old, and will be turning ${turningage} on ${userbday2021} which is in ${humanizedtime}. PauseChamp ⌚`)
+              }
+            }
+          }
+        })
+      }
+      else {
+		    db.get(`${specificuser.toLowerCase()}bday`).then(function(value) {
+			    let lookupbday = `${value}`
+          if(lookupbday === 'null') {
+            client.me(channel, (`${user} --> That user hasen't set their birthday! Get them to set it and retry. PANIC`))
+		      }
+          else {
+            let d = new Date()
+            let day = d.getDate()
+            let month = d.getMonth()
+            let year = d.getFullYear()
+            let today = `${day}` + '/' + `${month}` + '/' + `${year}`
+            let userbday2021 = lookupbday.replace(/(160[0-9]|16[1-9][0-9]|1[7-9][0-9]{2}|[2-9][0-9]{3})/g, '2021')
+
+            // AGES
+
+            let currentage = Math.floor((new Date(today).getTime() - new Date(`${lookupbday}`).getTime()) / 31556952000)
+            let turningage = Math.floor(((new Date(today).getTime() - new Date(`${lookupbday}`).getTime()) / 31556952000)) + 1
+
+            // TIME UNTIL
+
+            let differencebetweendays = new Date(userbday2021) - new Date(today)
+            if(differencebetweendays < 0) {
+              let timeuntilbday = 31536000000 + differencebetweendays
+              let humanizedtime = humanizeDuration(timeuntilbday, { units: ['mo', "d"], round: true })
+              let userbday2022 = lookupbday.replace(/(160[0-9]|16[1-9][0-9]|1[7-9][0-9]{2}|[2-9][0-9]{3})/g, '2022')
+              client.me(channel, `${user} --> User ${specificuser} is ${currentage} years old, and will be turning ${turningage} on ${userbday2022} which is in ${humanizedtime}. PauseChamp ⌚`)
+            }
+            else {
+              let humanizedtime = humanizeDuration(differencebetweendays, { units: ["mo", "d", "h", "m", "s"] })
+              if(humanizedtime === '0 seconds') {
+                client.me(channel, `${user} --> FeelsBirthdayMan❗Today ${specificuser}'s' birthday! Give them a "Happy Birthday" and a congrats on turning ${currentage}. catKISS 💖`)
+              }
+              else {
+                client.me(channel, `${user} --> User ${specificuser} is ${currentage} years old, and will be turning ${turningage} on ${userbday2021} which is in ${humanizedtime}. PauseChamp ⌚`)
+              }
+            }
+          }
+        })
+      }
     }
   }
