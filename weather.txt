@@ -134,7 +134,7 @@
     return weatherDetails
   }
 
-  if (command === 'weathertest') {
+  if (command === 'weather') {
     let specificLocation = `${args.join(' ')}`
     if (`${args[0]}` === 'undefined') {
       getWeatherUser(userlow).then(function(value) {
