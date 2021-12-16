@@ -1,8 +1,18 @@
   if(command === 'christmas') {
-    today = new Date();
-    xmas = new Date("December 25, 2021 05:00:00");
+    Date.prototype.addHours= function(h){
+        this.setHours(this.getHours()+h);
+        return this;
+    }
+
+    today = new Date().addHours(-5)
+    xmas = new Date("December 25, 2021");
 
     let timeUntilChristmas = humanizeDuration(xmas - today, { units: ["d", "h", "m", "s"], round: true, largest: 2})
 
-    client.me(channel, `${user} --> There is ${timeUntilChristmas} (EST+5) left until christmas! peepoSnow 🎄`);
+    if(today.toDateString() === 'Sat Dec 25 2021') {
+      client.me(channel, `YAAAY peepoSnow It's finally that time of year! Merry Christmas! YAAAY peepoSnow`);
+    }
+    else {
+      client.me(channel, `${user} --> There is ${timeUntilChristmas} (EST +5) left until christmas! peepoSnow 🎄`);
+    }
   }
