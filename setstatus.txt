@@ -1,0 +1,16 @@
+  if(command === 'setstatus') {
+    fs.ensureFileSync(`status/${userlow}.json`)
+    if(`${args.join(' ').trim()}` === 'clear' || `${args.join(' ').trim()}` === 'none') {
+      let newStatus = JSON.stringify({status: `noActiveStatus`, dateOfStatus: ``})
+      fs.writeFileSync(`status/${userlow}.json`, newStatus)
+      client.me(channel, `${user} --> Successfully cleared your status.`);
+    }
+    else if(`${args.join(' ')}` === '') {
+      client.me(channel, `${user} --> This command gives you a status that people can check. Example: "!setstatus learning javascript". To clear your status, use: "!setstatus none" "!setstatus clear".`)
+    }
+    else {
+      let newStatus = JSON.stringify({status: `${args.join(' ')}`, dateOfStatus: `${new Date()}`})
+      fs.writeFileSync(`status/${userlow}.json`, newStatus)
+      client.me(channel, `${user} --> Successfully set your current status to: "${args.join(" ")}"`);
+    }
+  }
