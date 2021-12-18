@@ -1,0 +1,50 @@
+  if(command === 'status') {
+    if(`${args[0]}` === 'undefined') {
+      let doesUserExist = fs.existsSync(`status/${userlow}.json`) 
+      if(doesUserExist === true) {
+        function addZero(i) {
+          if (i < 10) {i = "0" + i}
+          return i;
+        }
+        let status = fs.readJsonSync(`status/${userlow}.json`)
+        let currentStatus = status.status
+        if(currentStatus === 'noActiveStatus') {
+          client.me(channel, `${user} --> You have not set your status. Example: "!setstatus learning javascript"`)
+        }
+        else {
+          let dateSetDateObj = new Date(status.dateOfStatus)
+          let sinceDateSet = humanizeDuration(new Date(dateSetDateObj) - new Date(), { units: ["d", "h", "m", "s"], round: true, largest: 2 })
+          let dateSetFormatted = (dateSetDateObj.getMonth() + 1) + '/' + dateSetDateObj.getDate() + '/' + dateSetDateObj.getFullYear() + ' at ' + (+dateSetDateObj.getHours() - 5) + ':' + addZero(dateSetDateObj.getMinutes())
+          
+          client.me(channel, `${user} --> Your current status is: ${currentStatus} | Set on ${dateSetFormatted} (${sinceDateSet} ago) (EST-5). To clear your status, use: "!setstatus none" "!setstatus clear".`) 
+        }
+      }
+      else {
+        client.me(channel, `${user} --> You have not set your status. Example: "!setstatus learning javascript"`)
+      }
+    }
+    else {
+      let userToCheck = `${args[0].replace('@', '').toLowerCase()}`
+      let doesUserExist = fs.existsSync(`status/${userToCheck}.json`)
+      if(doesUserExist === true) {
+        function addZero(i) {
+          if (i < 10) {i = "0" + i}
+          return i;
+        }
+        let status = fs.readJsonSync(`status/${userToCheck}.json`)
+        let currentStatus = status.status
+        if(currentStatus === 'noActiveStatus') {
+          client.me(channel, `${user} --> That user has not yet set their status.`)
+        }
+        else {
+          let dateSetDateObj = new Date(status.dateOfStatus)
+          let sinceDateSet = humanizeDuration(new Date(dateSetDateObj) - new Date(), { units: ["d", "h", "m", "s"], round: true, largest: 2 })
+          let dateSetFormatted = (dateSetDateObj.getMonth() + 1) + '/' + dateSetDateObj.getDate() + '/' + dateSetDateObj.getFullYear() + ' at ' + (+dateSetDateObj.getHours() - 5) + ':' + addZero(dateSetDateObj.getMinutes())
+          client.me(channel, `${user} --> ${userToCheck}'s current status is: ${currentStatus} | Set on ${dateSetFormatted} (${sinceDateSet} ago) (EST-5)`)
+        }
+      }
+      else {
+        client.me(channel, `${user} --> That user has not yet set their status.`)
+      }
+    }
+  }
