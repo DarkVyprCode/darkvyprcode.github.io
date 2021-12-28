@@ -1,4 +1,4 @@
-  if(command === 'isbot') {
+  if(command === 'bot') {
     axios.get(`https://api.ivr.fi/twitch/resolve/${args[0]}`)
     .catch(err => { client.say(channel, `${tags.username}, That user dosen't exist!`)})
     .then((response) => {
