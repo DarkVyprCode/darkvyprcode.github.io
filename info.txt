@@ -1,0 +1,12 @@
+  if(command === 'info') {
+    if(`${args[0]}` === 'undefined') {
+      getUserData(userlow).then(function(value) {
+        client.me(channel, `${user} --> Name: ${value.name} | Banned: ${value.banned} | UID: ${value.uid} | Colour: ${value.colour} | Bio: ${value.bio} | Pfp: ${value.pfp} | Roles: ${value.roles}`)
+      })
+    }
+    else {
+      getUserData(`${args[0]}`).then(function(value) {
+        client.me(channel, `${user} --> Name: ${value.name} | Banned: ${value.banned} | UID: ${value.uid} | Colour: ${value.colour} | Bio: ${value.bio} | Pfp: ${value.pfp} | Roles: ${value.roles}`)
+      })
+    }
+  }
