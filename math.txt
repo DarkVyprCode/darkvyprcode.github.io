@@ -1,5 +1,11 @@
   if(command === 'math') {
-    axios.get(`https://api.mathjs.org/v4/?expr=${args.join(' ')}`).then(function(value) {
-      client.me(channel, `${user} --> ${value}`);
-    })
+    if(`${args[0]}` === 'undefined') {
+      client.me(channel, `${user} --> Please provide a problem to evaluate!`);
+    }
+    else {
+      axios.get(`https://api.mathjs.org/v4/?expr=${encodeURIComponent(args.join(''))}`)
+      .then((response) => {
+        client.me(channel, `${user} --> ${response.data}`);
+      })
+    }
   }
