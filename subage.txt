@@ -12,6 +12,9 @@
     let timeSinceSubEnded = humanizeDuration(new Date(subDetails.data.cumulative.end) - new Date(), { units: ["d", "h", "m", "s"], round: true, largest: 2,  delimiter: ' and ' })
     let subStreak = subDetails.data.streak.months
 
+    let followedAt = subDetails.data.followedAt
+    let timeSinceFollow = humanizeDuration(new Date(subDetails.data.followedAt) - new Date(), { units: ["y", "mo", "d", "h", "m", "s"], round: true, largest: 3 })
+
     function isUserSubbed() {
       if(`${isSubbed}` === 'false') {
         return `${subUser} is not currently subscribed to @${subChannel},`
@@ -48,7 +51,9 @@
       remainingOnActiveSub: remainingOnActiveSub,
       timeSinceSubEnded: timeSinceSubEnded,
       subStreak: subStreak,
-      isBotPermaSub: subDetails.data.meta.endsAt
+      isBotPermaSub: subDetails.data.meta.endsAt,
+      followedAt: followedAt,
+      timeSinceFollow: timeSinceFollow
     }
     return obj
   }
