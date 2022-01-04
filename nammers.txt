@@ -35,5 +35,6 @@
         else {
           client.me(channel, `${user} --> That user has ${nammers.nammers} nammers.`)
         }
+      })
     }
   }
