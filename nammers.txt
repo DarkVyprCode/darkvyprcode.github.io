@@ -1,25 +1,39 @@
+  async function checkNammers(user) {
+    let userNammers = await db.get(`${user}nammers`)
+    if(userNammers == null) {
+      return {
+        success: true,
+        case: 'user_not_found',
+        nammers: null
+      }
+    }
+    else {
+      return {
+        success: true,
+        case: null,
+        nammers: userNammers
+      }
+    }
+  }
+
   if(command === 'nammers') {
-    if(`${args[0]}` === 'undefined') {
-      db.get(`${tags.username}nammers`).then(function(value) {
-        let nammers = `${value}`
-          if(nammers === 'null') {
-            client.say(channel, (`${tags.username} --> GearScare ⛔ You don't have any nammers! Get some by typing "!hunt", and kill some by typing "!kill {amount}"!`))
-          }
-          else {
-            client.say(channel, (`${tags.username} --> NOTED You have ${nammers} nammers. Get some by typing "!hunt", and kill some by typing "!kill {amount}".`))
-          }
+    if(args.length == 0) {
+      checkNammers(userlow).then(nammers => {
+        if(nammers.case == 'user_not_found') {
+          client.me(channel, `${user} --> You have never hunted! Use "vb hunt" to get more nammers, and retry this command.`)
+        }
+        else {
+          client.me(channel, `${user} --> You have ${nammers.nammers} nammers. Use "vb hunt" to get more.`)
+        }
       })
     }
     else {
-      let checkuser = `${args[0]}`.toLowerCase()
-      db.get(`${checkuser}nammers`).then(function(value) {
-        let nammers = `${value}`
-          if(nammers === 'null') {
-            client.say(channel, (`${tags.username} --> GearScare ⛔ That user dosent exist!`))
-          }
-          else {
-            client.say(channel, (`${tags.username} --> NOTED ${args[0]} has ${nammers} nammers.`))
-          }
-      })
+      checkNammers(args[0].toLowerCase().replace('@', '')).then(nammers => {
+        if(nammers.case == 'user_not_found') {
+          client.me(channel, `${user} --> That user has never hunted!`)
+        }
+        else {
+          client.me(channel, `${user} --> That user has ${nammers.nammers} nammers.`)
+        }
     }
   }
