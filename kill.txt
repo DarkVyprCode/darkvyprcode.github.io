@@ -1,0 +1,58 @@
+  function killMessage(amount) {
+    if(+amount >= 1 && +amount < 20) {
+      return `You line ${amount} nammer(s) up in front of a firing squad,`
+    }
+    else if(+amount >= 20 && +amount < 50) {
+      return `You send ${amount} nammer(s) off to "training" (a volcano),`
+    }
+    else if(+amount >= 50 && +amount < 80) {
+      return `You drop a car on ${amount} nammer(s) killing them,`
+    }
+    else if(+amount >= 80 && +amount < 120) {
+      return `You stare ${amount} nammer(s) in the eyes as you stab them one-by-one,`
+    }
+    else if(+amount >= 120 && +amount < 200) {
+      return `You lethally inject ${amount} nammer(s) with rat poison,`
+    }
+    else if(+amount >= 200 && +amount < 250) {
+      return `You fatally electrocute ${amount} nammer(s) one-by-one, make the others watch,`
+    }
+    else if(+amount >= 250 && +amount < 1000) {
+      return `You make ${amount} nammer(s) jump off of a building in a single file line,`
+    }
+    else {
+      return `You enlist ${amount} nammer(s) into the VietNaM war,`
+    }
+  }
+  
+  if(command === 'kill') {
+		db.get(`${userlow}nammers`).then(function(value) {
+			let nammers = `${value}`
+        if(nammers === 'null' || +nammers === 0) {
+          client.me(channel, (`${user} --> GearScare ⛔ You don't have any nammers to kill! Use "vb hunt" to get more.`))
+		    }
+        else {
+          if(+`${args[0]}` > +`${nammers}`) {
+            client.me(channel, (`${user} --> MenheraCry You try to kill ${args[0]} nammer(s), but realize that you only have ${nammers} nammer(s), and give up.`))
+          }
+          else {
+            let killamount = `${args[0]}`
+            const regex = new RegExp('^([1-9]|[1-9][0-9]{1,6})$');
+            testForNumber = `${regex.test(killamount)}`
+
+            if(testForNumber === 'true') {
+              let afterkill = +nammers - +killamount
+              db.set(`${userlow}nammers`, afterkill)
+              client.me(channel, (`${user} --> NekoProud 🔪 ${killMessage(killamount)} and are left with ${afterkill} nammer(s).`))
+            }
+            else if(`${args[0]}` === 'all') {
+              db.set(`${userlow}nammers`, 0)
+              client.me(channel, (`${user} --> GearScare 🔪 ${killMessage(nammers)} and now have nothing.`))
+            }
+            else {
+              client.me(channel, (`${user} --> Please enter a valid amount of nammers to kill KannaSip`))
+            }
+          }
+        }
+    })
+  }
