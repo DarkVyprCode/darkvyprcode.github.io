@@ -1,0 +1,36 @@
+  if(command === 'set') {
+    const valueToSet = `${args[0]}`
+    let value1 = `${args[1]}`
+    let value2 = `${args[2]}`
+    const regex = new RegExp('^(?!0?2/3)(?!0?2/29/.{3}[13579])(?!0?2/29/.{2}[02468][26])(?!0?2/29/.{2}[13579][048])(?!(0?[469]|11)/31)(?!0?2/29/[13579][01345789]0{2})(?!0?2/29/[02468][1235679]0{2})(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/([0-9]{4})$')
+    if(args.length == 0 || args[1] == undefined) {
+      client.me(channel, `${user} --> Invalid Syntax. Options: Location, Twitter account or Birthday. Examples: "vb set twitter darkvyprr", "vb set birthday 8/14/2005 (mm/dd/yyyy)" or "vb set location lasalle ontario ({city} {state, province or country})"`)
+    }
+    else if(valueToSet == 'twitter') {
+      let twitterAccount = `${args[1]}`.replace('@', '').toLowerCase()
+      db.set(`${userlow}twitter`, twitterAccount)
+      client.me(channel, `${user} --> Succesfully set your Twitter account to @${twitterAccount}!`)
+    }
+    else if(valueToSet == 'location') {
+      if(value1 == 'undefined' || value2 == 'undefined') {
+        client.me(channel, `${user} --> That's not a valid location! Examples: "vb set location stockholm sweden" or "vb set location springfield virginia".`)
+      }
+      else {
+        let locationCorrected = (value1[0].toUpperCase() + value1.substring(1)) + ', ' + (value2[0].toUpperCase() + value2.substring(1))
+        db.set(`${userlow}time`, locationCorrected)
+        client.me(channel, `${user} --> Successfully set your location to ${locationCorrected}!`)
+      }
+    }
+    else if(valueToSet == 'bday' || valueToSet == 'birthday') {
+      if(!regex.test(args[1])) {
+        client.me(channel, `${user} --> Invalid Syntax. Options: Location, Twitter account or Birthday. Examples: "vb set twitter darkvyprr", "vb set birthday 8/14/2005 (mm/dd/yyyy)" or "vb set location lasalle ontario ({city} {state, province or country})"`)
+      }
+      else {
+        db.set(`${userlow}bday`, value1)
+        client.me(channel, `${user} --> Successfully set your birthday to ${value1}!`)
+      }
+    }
+    else {
+      client.me(channel, `${user} --> Invalid Syntax. Options: Location, Twitter account or Birthday. Examples: "vb set twitter darkvyprr", "vb set birthday 8/14/2005 (mm/dd/yyyy)" or "vb set location lasalle ontario ({city} {state, province or country})"`)
+    }
+  }
