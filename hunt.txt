@@ -1,0 +1,76 @@
+  async function huntNammers(user) {
+    let [userNammers, randomInt] = [await db.get(`${user}nammers`), Math.floor(Math.random()* 61) - 25]
+    let huntMessage = (randomInt) => {
+      switch(true) {
+        case (randomInt >= 50):
+          return `You take control of a city full of nammers, and send all of its citizens to your prison.🏙️`
+        case (randomInt >= 40):
+          return `You raid Chaz, a police-free autonomous zone, and return with ${randomInt} nammers.🚧`
+        case (randomInt >= 30):
+          return `You visit a village of nammers, and come out with ${randomInt}.🛖`
+        case (randomInt >= 20):
+          return `You raid a local restaurant, and find ${randomInt} nammers.🍕`
+        case (randomInt >= 10):
+          return `You enter a small hut, and find a group of ${randomInt} nammers.👥`
+        case (randomInt > 0 ):
+          return `You find and capture a small huddle of ${randomInt} nammers.👤`
+        case (randomInt == 0):
+          return `You didn't find any nammers, better luck next time. PoroSad`
+        default:
+          return `You leave the prison gates cracked open, and ${randomInt * -1} nammers unknowingly escape! PANIC`
+      }
+    }    
+    if(userNammers == null) {
+      await db.set(`${user}nammers`, 50)
+      return {
+        success: true,
+        case: 'new_user',
+        beforeHunt: null,
+        afterHunt: 50,
+        reply: "You are a new user! Here's 50 nammers to get you started."
+      }
+    }
+    else if(+userNammers + +randomInt < 0) {
+      await db.set(`${user}nammers`, 0)
+      return {
+        success: true,
+        case: 'lost_more_than_balance',
+        beforeHunt: +userNammers,
+        afterHunt: 0,
+        reply: huntMessage(randomInt)
+      }
+    }
+    else {
+      let afterHunt = +userNammers + +randomInt
+      await db.set(`${user}nammers`, afterHunt)
+      return {
+        success: true,
+        case: 'regular',
+        beforeHunt: +userNammers,
+        afterHunt: afterHunt,
+        reply: huntMessage(randomInt)
+      }
+    }
+  }
+
+  if (command === 'hunt') {
+    if(huntNammersCooldown.has(userlow)) {
+      client.me(channel, `${user} --> Please wait 1 hour in between hunting! GearScare ⛔`)
+    }
+    else {
+      huntNammers(userlow).then(function(huntResult) {
+        if(huntResult.case == 'new_user') {
+          client.me(channel, `${user} --> ${huntResult.reply} | You now have 50 nammers | 1 hour cooldown`)
+          
+          huntNammersCooldown.add(userlow)
+          setTimeout(() => { huntNammersCooldown.delete(userlow) }, 3600000)
+        }
+        else {
+          client.me(channel, `${user} --> ${huntResult.reply} | You now have ${huntResult.afterHunt} nammers | 1 hour cooldown`)
+          
+          huntNammersCooldown.add(userlow)
+          setTimeout(() => { huntNammersCooldown.delete(userlow) }, 3600000)
+        }
+      })
+    }
+  }
