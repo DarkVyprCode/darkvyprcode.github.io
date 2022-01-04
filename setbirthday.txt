@@ -1,9 +1,0 @@
-  if(command === 'setbirthday') {
-    if(args[0] === 'undefined' || !/^(?:(?:(?:0?[13578]|1[02])(\/|-|\.)31)\1|(?:(?:0?[13-9]|1[0-2])(\/|-|\.)(?:29|30)\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:0?2(\/|-|\.)29\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\/|-|\.)(?:0?[1-9]|1\d|2[0-8])\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/g.test(args[0])) {
-      client.say(channel, `${user} --> Invalid syntax! Examples: "!setbirthday 8/14/2005", "!setbirthday 10/16/2004" or "!setbirthday 9/11/1973".`)
-    }
-    else {
-      db.set(`${userlow}bday`, args[0])
-      .then(client.me(channel, `${user} --> Succesfully set your birthday to ${args[0]}!`))
-    }
-  }
