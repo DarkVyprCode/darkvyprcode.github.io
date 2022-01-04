@@ -1,0 +1,109 @@
+  async function giveNammers(sender, recipient, amount) {
+    if(`${recipient}` == 'undefined' || `${amount}` == 'undefined') {
+      return {
+        success: false,
+        reason: 'syntax'
+      }
+    }
+    else {
+      let senderNammers = await db.get(`${sender.toLowerCase()}nammers`)
+      let recipientNammers = await db.get(`${recipient.toLowerCase().replace('@', '')}nammers`)
+      let checkIfNumber
+      if(`${senderNammers}` == 'null') {
+        return {
+          success: false,
+          reason: "sender doesn't exist"
+        }
+      }
+      else if(`${recipientNammers}` == 'null') {
+        return {
+          success: false,
+          reason: "recipient doesn't exist"
+        }
+      }
+
+      else if(+senderNammers < +amount) {
+        return {
+          success: false,
+          balance: +senderNammers,
+          reason: 'tried to give too many'
+        }
+      }
+      else if(sender == recipient.toLowerCase()) {
+        return {
+          success: false,
+          reason: 'self give'
+        }
+      }
+      else if(!isNumber(amount) && amount !== 'all') {
+        return {
+          success: false,
+          reason: 'nan'
+        }
+      }
+      else if(amount == 'all') {
+        return {
+          success: true,
+          case: 'all',
+          giveAmount: +senderNammers,
+          senderAmountAfterGive: 0,
+          recipientAmountAfterGive: +recipientNammers + +senderNammers
+        }
+      }
+      else if(isNumber(amount)) {
+        return {
+          success: true,
+          case: 'amount',
+          giveAmount: amount,
+          senderAmountAfterGive: +senderNammers - amount,
+          recipientAmountAfterGive: +recipientNammers + +amount
+        }
+      }
+      else {
+        return {
+          success: false,
+          reason: 'unknown'
+        }
+      } 
+    }
+  }
+
+  if (command === 'give') {
+    let [sender, recipient, amount] = [userlow, `${args[0]}`, args[1]]
+    giveNammers(sender, recipient, amount).then(function(giveData) {
+      if(giveData.success === false && giveData.reason === 'syntax') {
+        client.me(channel, `${user} --> Please provide an amount to give away and a user to give to. Example: "vb give darkvypr 100".`)
+      }
+      else if(giveData.success === false && giveData.reason === "sender doesn't exist") {
+        client.me(channel, `${user} --> You aren't in the database! Use "vb hunt" to get some nammers, and retry this command.`)
+      }
+      else if(giveData.success === false && giveData.reason === "recipient doesn't exist") {
+        client.me(channel, `${user} --> That user doesn't exist in the database.`)
+      }
+      else if(giveData.success === false && giveData.reason === 'tried to give too many') {
+        client.me(channel, `${user} --> You don't have enough nammers! You tried to give away ${amount} nammer(s) but only have ${giveData.balance}.`)
+      }
+      else if(giveData.success === false && giveData.reason === 'self give') {
+        client.me(channel, `${user} --> You can't give nammers to yourself!`)
+      }
+      else if(giveData.success === false && giveData.reason === 'nan') {
+        client.me(channel, `${user} --> That wasn't a valid amount to give away! Example: "vb give darkvypr 100".`)
+      }
+      else if(giveData.success === true && giveData.case === 'all') {
+        db.set(`${sender}nammers`, 0)
+        db.set(`${recipient.toLowerCase().replace('@', '')}nammers`, giveData.recipientAmountAfterGive)
+        client.me(channel, `${user} --> You successfully gave all ${giveData.giveAmount} of your nammers to ${recipient.toLowerCase()}. You now have 0 nammers, and ${recipient.toLowerCase()} now has ${giveData.recipientAmountAfterGive} nammers.`)
+      }
+      else if(giveData.success === true && giveData.case === 'amount') {
+        db.set(`${sender}nammers`, giveData.senderAmountAfterGive)
+        db.set(`${recipient.toLowerCase().replace('@', '')}nammers`, giveData.recipientAmountAfterGive)
+        client.me(channel, `${user} --> You successfully gave ${giveData.giveAmount} of your nammers to ${recipient.toLowerCase()}. You now have ${giveData.senderAmountAfterGive} nammers, and ${recipient.toLowerCase()} now has ${giveData.recipientAmountAfterGive} nammers.`)
+      }
+      else if(giveData.success === false && giveData.reason === 'unknown') {
+        client.me(channel, `${user} --> An unknown error has occurred! Please report this with the "vb suggest" command. Please include screenshots and a short description of what triggered the event so I can fix it.`)
+      }
+      else {
+        client.me(channel, `${user} --> An unknown error has occurred! Please report this with the "vb suggest" command. Please include screenshots and a short description of what triggered the event so I can fix it.`)
+      }
+    })
+  }
