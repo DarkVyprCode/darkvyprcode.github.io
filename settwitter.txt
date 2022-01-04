@@ -1,6 +1,0 @@
-  if (command === 'settwitter') {
-    db.set(`${tags.username}twitter`, `${args[0]}`)
-      .then(() => db.list())
-      .then(keys => console.log(keys))
-      .then(client.say(channel, `${tags.username}, Succesfully set your Twitter account to ${args[0]}!`))
-  }
