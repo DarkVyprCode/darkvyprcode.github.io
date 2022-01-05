@@ -1,0 +1,28 @@
+  async function joinChannel(args) {
+    if (args.length == 0) {
+      return { success: false, case: 'no_channel_given', channelJoined: null, reply: "Please provide a channel to join." }
+    }
+    else if (channelOptions.indexOf(args[0].toLowerCase()) > -1) {
+      return { success: false, case: 'channel_already_joined', channelJoined: null, reply: "I'm already in that channel!" }
+    }
+    else {
+      channelOptions.push(args[0].toLowerCase())
+      fs.writeFile('channels.txt', channelOptions.join(' '))
+      client.join(args[0].toLowerCase())
+      client.me(args[0].toLowerCase(), `Successfully joined! KonCha`)
+      return { success: true, case: null, channelJoined: args[0], reply: `Successfully joined #${args[0].toLowerCase()} TehePelo` }
+    }
+  }
+
+  if (command === 'join') {
+    checkAdmin(userlow).then(isAdmin => {
+      if (isAdmin) {
+        joinChannel(args).then(joinData => {
+          client.me(channel, `${user} --> ${joinData.reply}`)
+        })
+      }
+      else {
+        client.me(channel, `${user} --> You don't have the required permission to use that command! If you'd like the bot in your channel, use "vb suggest". Required: Admin`)
+      }
+    })
+  }
