@@ -1,0 +1,33 @@
+  async function partChannel(channel, admin) {
+    if (channel == undefined && admin) {
+      return { success: false, case: 'no_channel_given', channelLeft: null, reply: "Please provide a channel to leave." }
+    }
+    else if (channelOptions.indexOf(channel.toLowerCase()) == -1 && admin) {
+      return { success: false, case: 'channel_not_joined', channelLeft: null, reply: "I'm not in that channel!" }
+    }
+    else {
+      channelOptions.splice(channelOptions.indexOf(channel.toLowerCase()), 1)
+      fs.writeFile('channels.txt', channelOptions.join(' '))
+      client.me(channel.toLowerCase(), `Successfully left this channel! SadCat`)
+      client.part(channel.toLowerCase())
+      return { success: true, case: null, channelLeft: channel, reply: `Successfully left #${channel} SadCat` }
+    }
+  }
+
+  if (command === 'part') {
+    checkAdmin(userlow).then(isAdmin => {
+      if (isAdmin) {
+        partChannel(args[0], isAdmin).then(partData => {
+          client.me(channel, `${user} --> ${partData.reply}`)
+        })
+      }
+      else if (userlow == channel) {
+        partChannel(channel, isAdmin).then(partData => {
+          client.me(channel, `${user} --> ${partData.reply}`)
+        })
+      }
+      else {
+        client.me(channel, `${user} --> You don't have the required permission to use that command! Required: Admin or Channel Broadcaster`)
+      }
+    })
+  }
