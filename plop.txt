@@ -1,0 +1,11 @@
+  let plopArray = ["https://i.imgur.com/jfVieNQ.png", "https://i.imgur.com/PAjqrhD.png", "https://i.imgur.com/dwMMtSD.png", "https://i.imgur.com/EMixIJq.png", 
+                   "https://i.imgur.com/BX5GXFO.png", "https://i.imgur.com/4PUBRLf.png", "https://i.imgur.com/g7vIKbC.png", "https://i.imgur.com/gBoJaoD.png", 
+                   "https://i.imgur.com/vKyWwTE.png", "https://i.imgur.com/tPNuJ4r.png", "https://i.imgur.com/McBKJwY.png"]
+
+  if(/^plop[\d+]$/.test(command)) {
+    client.me(channel, `${user} --> ${plopArray[+command.replace('plop', '') - 1]}`)
+  }
+  
+  if(command == 'plop') {
+    client.me(channel, `${user} --> Random Plop message: ${plopArray[getRandomInt(plopArray.length)]}`)
+  }
