@@ -1,11 +1,10 @@
+  let plopArray = ["jfVieNQ.png", "PAjqrhD.png", "dwMMtSD.png", "EMixIJq.png", "BX5GXFO.png", "4PUBRLf.png", "g7vIKbC.png", "gBoJaoD.png", 
+                   "vKyWwTE.png", "tPNuJ4r.png", "McBKJwY.png"]
+
   if(/^plop[\d+]$/.test(command)) {
     client.me(channel, `${user} --> https://i.imgur.com/${plopArray[+command.replace('plop', '') - 1]}`)
   }
   
   if(command == 'plop') {
     client.me(channel, `${user} --> Random Plop message: https://i.imgur.com/${plopArray[getRandomInt(plopArray.length)]}`)
-  }
-
-  if (command === 'plopcolour') {
-    client.me(channel, `${user} --> #94DCCC`);
   }
