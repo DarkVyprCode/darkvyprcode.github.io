@@ -1,0 +1,12 @@
+  async function pickRamdom(args) {
+    if(args.length < 2) {
+      return { randomElement: null, reply: `Please specify at least 2 items to pick from!` }
+    }
+    return { randomElement: args[+getRandomInt(args.length) - 1], reply: args[+getRandomInt(args.length) - 1] }
+  }
+
+  if (command === 'pick') {
+    pickRamdom(args).then(pickData => {
+      client.me(channel, `${user} --> ${pickData.reply}`)
+    })
+  }
