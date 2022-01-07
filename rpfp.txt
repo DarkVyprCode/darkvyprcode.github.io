@@ -1,0 +1,16 @@
+  async function rPFP() {
+    let chatters = await axios.get(`https://tmi.twitch.tv/group/user/${channel}/chatters`)
+    let allChatters = chatters.data.chatters.broadcaster.concat(chatters.data.chatters.vips, chatters.data.chatters.moderators, chatters.data.chatters.staff, chatters.data.chatters.admins, chatters.data.chatters.global_mods, chatters.data.chatters.viewers)
+    let chatter = allChatters[+getRandomInt(allChatters.length) - 1]
+    let randomChatterData = await axios.get(`https://api.ivr.fi/twitch/resolve/${chatter}`)
+    if (args.indexOf('user:true') > -1) {
+      return { chatter: chatter, pfp: randomChatterData.data.logo, reply: `User: ${chatter} | Profile Picture: ${randomChatterData.data.logo}` }
+    }
+    return { chatter: chatter, pfp: randomChatterData.data.logo, reply: `Random Profile Picture: ${randomChatterData.data.logo}` }
+  }
+
+  if (command === 'rpfp') {
+    rPFP().then(pfp => {
+      client.me(channel, `${user} --> ${pfp.reply}`)
+    })
+  }
