@@ -1,0 +1,42 @@
+  async function completeSuggestion(args) {
+    if (args.length < 2 || !/^\d+$/.test(args[0]) || !/^approved|denied|completed|declined$/.test(args[1])) {
+      return { success: false, reply: `Invalid Syntax! Example: "${prefix}complete {id} {action} {reason}"` }
+    }
+    let [id, action] = [+args[0], args[1].toLowerCase()]
+    let reason = () => {
+      switch (args.slice(2).join(' ')) {
+        case '':
+          return '(No Message Provided)'
+        default:
+          return args.slice(2).join(' ')
+      }
+    }
+    if (!(await fs.exists(`suggestions/active/${id}.json`))) {
+      return { success: false, reply: `There is no suggestion with that id!` }
+    }
+    let suggestionDetails = await fs.readJson(`suggestions/active/${id}.json`)
+    let suggestionObj = {
+      user: suggestionDetails.user,
+      id: suggestionDetails.id,
+      date: suggestionDetails.date,
+      state: suggestionDetails.state,
+      body: suggestionDetails.suggestion
+    }
+    if (action == 'approved' || action == 'completed') {
+      await fs.writeJson(`suggestions/active/${id}.json`, { user: suggestionDetails.user, actionBy: userlow, id: id, date: suggestionDetails.date, dateApproved: new Date().addHours(-5).toISOString(), state: 'Approved/Finished', suggestion: suggestionDetails.suggestion, reason: reason() })
+      await fs.rename(`suggestions/active/${id}.json`, `suggestions/approved/${id}.json`)
+      client.whisper(suggestionObj.user, `[Suggestion Update] Your suggestion with the ID ${suggestionDetails.id} was ${action}! Notes: ${reason()}`)
+      await axios.post(`https://supinic.com/api/bot/reminder?auth_user=${process.env['SUPI_USER_AUTH']}&auth_key=${process.env['SUPI_USERKEY_AUTH']}&username=${suggestionDetails.user}&private=true&text=[VyprBot Update] Your suggestion on VyprBot with the ID ${suggestionDetails.id} was ${action}! Notes: ${reason()}`)
+      return { success: true, reply: `Successfully notified @${suggestionDetails.user} and ${action} suggestion ${suggestionDetails.id}.` }
+    }
+    else if (action == 'denied' || action == 'declined') {
+      await fs.writeJson(`suggestions/active/${id}.json`, { user: suggestionDetails.user, actionBy: userlow, id: id, date: suggestionDetails.date, dateApproved: new Date().addHours(-5).toISOString(), state: 'Denied', suggestion: suggestionDetails.suggestion, reason: reason() })
+      await fs.rename(`suggestions/active/${id}.json`, `suggestions/denied/${id}.json`)
+      client.whisper(suggestionObj.user, `[Suggestion Update] Your suggestion with the ID ${suggestionDetails.id} was ${action}! Notes: ${reason()}`)
+      await axios.post(`https://supinic.com/api/bot/reminder?auth_user=${process.env['SUPI_USER_AUTH']}&auth_key=${process.env['SUPI_USERKEY_AUTH']}&username=${suggestionDetails.user}&private=true&text=[VyprBot Update] Your suggestion on VyprBot with the ID ${suggestionDetails.id} was ${action}! Notes: ${reason()}`)
+      return { success: true, reply: `Successfully notified @${suggestionDetails.user} and ${action} suggestion ${suggestionDetails.id}.` }
+    }
+    else {
+      return { success: false, reply: `There was an error somewhere in that command!` }
+    }
+  }
