@@ -1,0 +1,15 @@
+  async function newSuggestion(args) {
+    if (args.length == 0) {
+      return { success: false, reply: `Please provide a suggestion. Make the suggestion as descriptive as possible.` }
+    }
+    let [id, content, today] = [+(await db.get('suggestion')) + 1, args.join(' '), new Date().addHours(-5).toISOString()]
+    db.set('suggestion', id)
+    await fs.writeJson(`suggestions/active/${id}.json`, { user: userlow, id: id, date: today, state: 'Active/Being Worked On', suggestion: content })
+    client.whisper('darkvypr', `[New Suggestion] User: ${userlow} | ID: ${id} | Body: ${content}`)
+    let checkIfAFK = await axios.get(`https://supinic.com/api/bot/afk/check?auth_user=${process.env['SUPI_USER_AUTH']}&auth_key=${process.env['SUPI_USERKEY_AUTH']}&userID=1093802`)
+    if (checkIfAFK.data.data.status !== null) {
+      await axios.post(`https://supinic.com/api/bot/reminder?auth_user=${process.env['SUPI_USER_AUTH']}&auth_key=${process.env['SUPI_USERKEY_AUTH']}&userID=1093802&private=true&text=[New Suggestion] A new suggestion has been made while you were AFK: User: ${userlow} | ID: ${id} | Body: ${content}`)
+    }
+    client.whisper(userlow, `You created a suggestion with the ID: ${id}`)
+    return { success: true, reply: `Your suggestion has been saved. ID: ${id}` }
+  }
