@@ -1,0 +1,50 @@
+  async function checkSuggestion(args) {
+    if (args.length == 0 || !/^\d+$/.test(args[0])) {
+      return { success: false, reply: `Please provide a valid suggestion ID to unset.` }
+    }
+    let id = +args[0]
+    let location = () => {
+      if(fs.existsSync(`suggestions/active/${id}.json`)) {
+        return { success: true, location: 'active' }
+      }
+      else if(fs.existsSync(`suggestions/approved/${id}.json`)) {
+        return { success: true, location: 'approved' }
+      }
+      else if(fs.existsSync(`suggestions/author-dismissed/${id}.json`)) {
+        return { success: true, location: 'author-dismissed' }
+      }
+      else if(fs.existsSync(`suggestions/denied/${id}.json`)) {
+        return { success: true, location: 'denied' }
+      }
+      else {
+        return { success: false, location: null }
+      }
+    }
+    let locationOfSuggestion = location()
+    if (!locationOfSuggestion.success) {
+      return { success: false, reply: `There is no suggestion with that id!` }
+    }
+    let suggestionDetails = await fs.readJson(`suggestions/${locationOfSuggestion.location}/${id}.json`)
+    if (suggestionDetails.user !== userlow && !await checkAdmin(userlow)) {
+      return { success: false, reply: `You don't own that suggestion!` }
+    }
+    let suggestionObj = {
+      user: suggestionDetails.user,
+      id: suggestionDetails.id,
+      date: suggestionDetails.date,
+      state: suggestionDetails.state,
+      body: suggestionDetails.suggestion
+    }
+    let reasonsAndMoreInfo = () => {
+      if(locationOfSuggestion.location == 'denied' || locationOfSuggestion.location == 'approved') {
+        if(suggestionDetails.reason == '') {
+          return `| No reason provided | Action By: ${suggestionDetails.actionBy} |`
+        }
+        return `| Reason: ${suggestionDetails.reason} | Action By: ${suggestionDetails.actionBy} |`
+      }
+      else {
+        return `|`
+      }
+    }
+    return { success: true, suggestionObj, reply: `ID: ${id} | State: ${suggestionObj.state} | Date Created: ${dateFormat(suggestionObj.date, "mmmm dS, yyyy ' at ' h:MM TT")} (${humanizeDuration(timeDelta(suggestionObj.date), { largest: 2, round: true, delimiter: " and " })} ago) ${reasonsAndMoreInfo()} Suggestion: ${suggestionObj.body}` }
+  }
