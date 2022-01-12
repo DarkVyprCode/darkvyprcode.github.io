@@ -1,95 +1,50 @@
   // Permission System
-  
-  async function permitUser(user) {
-    var existingPermits = await db.get(`${channel}permits`)
-    if(`${existingPermits}` === 'null') {
-      await db.set(`${channel}permits`, channel)
-    }
-    var existingPermits = await db.get(`${channel}permits`)
-    let existingPermitsArray = existingPermits.split(' ')
-    if(existingPermitsArray.indexOf(user) > -1) {
-      return 'That user is alredy permitted in this channel!'
-    }
-    else {
-      existingPermitsArray.push(user)
-      let joinedExisting = existingPermitsArray.join(' ').trim()
-      db.set(`${channel}permits`, joinedExisting)
-    }
-  }
 
-  async function unpermitUser(user) {
-    var existingPermits = await db.get(`${channel}permits`)
-    if(`${existingPermits}` === 'null') {
-      await db.set(`${channel}permits`, channel)
+  async function permitSystem(args) {
+    if (!await checkAdmin(userlow) && userlow !== channel) {
+      return { success: false, reply: `You don't have the required permission to perform that command! Required: Channel Broadcaster or Above.` }
     }
-    var existingPermits = await db.get(`${channel}permits`)
-    let existingPermitsArray = existingPermits.split(' ')
-    let indexOfUser = existingPermitsArray.indexOf(user)
-    if(indexOfUser > -1) {
-      existingPermitsArray.splice(indexOfUser)
-      let joinedExisting = existingPermitsArray.join(' ').trim()
-      db.set(`${channel}permits`, joinedExisting)
+    if (args.length == 0 || !/^add$|^remove$|^delete$|^check$/i.test(args[0]) || !args[1]) {
+      return { success: false, reply: `Invalid Syntax! Example: "${prefix}permit {add|delete|remove|check} {user}"` }
+    }
+    var existingPerms = await db.get(`${channel}permits`)
+    if (!existingPerms || existingPerms == '') {
+      await db.set(`${channel}permits`, channel)
+      existingPerms = await db.get(`${channel}permits`)
+    }
+    let [permitsArray, action, userPermit] = [existingPerms.split(' '), args[0].toLowerCase(), args[1].replace('@', '').toLowerCase()]
+    if (action == 'add') {
+      if (permitsArray.indexOf(userPermit) > -1) { return { success: false, reply: 'That user is alredy permitted in this channel!' } }
+      permitsArray.push(userPermit)
+      db.set(`${channel}permits`, permitsArray.join(' '))
+      return { success: true, reply: `Successfully permitted @${userPermit} in #${channel}` }
+    }
+    else if (action == 'delete' || action == 'remove') {
+      if (permitsArray.indexOf(userPermit) < 0) { return { success: false, reply: 'That user is not permitted in this channel!' } }
+      permitsArray.splice(permitsArray.indexOf(userPermit), 1)
+      db.set(`${channel}permits`, permitsArray.join(' '))
+      return { success: true, reply: `Successfully removed @${userPermit}'s permissions in #${channel}` }
+    }
+    else if (action == 'check') {
+      if (permitsArray.indexOf(userPermit) < 0) { return { success: true, reply: `@${userPermit} is not permitted in #${channel}!❌` } }
+      else { return { success: true, reply: `@${userPermit} is permitted in #${channel}!✅` } }
     }
     else {
-      return 'That user is not permitted in this channel!'
+      return { success: true, reply: `An unknown error has occured. Please report this by suggesting this so I can fix it.` }
     }
   }
 
   async function checkPermitted(user) {
-    permits = await db.get(`${channel}permits`)
-    if(`${permits}` === 'null') {
-      throw `There are no permitted users in #${channel}!`
-    }
-    else {
-      permitsArray = permits.split(' ')
-      if(permitsArray.indexOf(user) > -1) {
-        return 'true'
-      }
-      else {
-        return 'false'
-      }
-    }
+    if (await checkAdmin(user)) { return 'true' }
+    if (user == channel) { return 'true' }
+    var existingPerms = await db.get(`${channel}permits`)
+    if (!existingPerms) { return 'false' }
+    let permitsArray = existingPerms.split(' ')
+    return permitsArray.indexOf(user) > -1 ? 'true' : 'false'
   }
 
-  if(command === 'permit') {
-    checkAdmin(userlow).then(function(isAdmin) {
-      if(userlow === 'darkvypr' || userlow === channel || isAdmin === 'true') {
-        if(!/^add$|^remove$|^delete$|^check$/i.test(`${args[0]}`) || `${args[1]}` === 'undefined') {
-          client.me(channel, `${user} --> Invalid Syntax! Example: "vb permit {add|delete|remove|check} {user}".`)
-        }
-        else if(`${args[0]}` === 'add') {
-          permitUser(`${args[1].toLowerCase()}`).then(function(value) {
-            if(value === 'That user is alredy permitted in this channel!') {
-              client.me(channel, `${user} --> That user is alredy permitted in #${channel}!`)
-            }
-            else {
-              client.me(channel, `${user} --> Successfully allowed user ${args[1].toLowerCase()} to use all permission locked commands!`)
-            }
-          })
-        }
-        else if(`${args[0]}` === 'delete' || `${args[0]}` === 'remove') {
-          unpermitUser(`${args[1].toLowerCase()}`).then(function(value) {
-            if(value === 'That user is not permitted in this channel!') {
-              client.me(channel, `${user} --> That user is not permitted in #${channel}!`)
-            }
-            else {
-              client.me(channel, `${user} --> Successfully removed ${args[1].toLowerCase()}'s permissions to use all locked commands!`)
-            }
-          })
-        }
-        else if(`${args[0]}` === 'check') {
-          checkPermitted(`${args[1].toLowerCase()}`).catch(err => { client.me(channel, `${user} --> ${err}!`) }).then(function(value) {
-            if(value === 'true') {
-              client.me(channel, `${user} --> User ${args[1]} is permitted in #${channel}! ✅`)
-            }
-            else {
-              client.me(channel, `${user} --> User ${args[1]} is not permitted in #${channel}! ❌`)
-            }
-          })
-        }
-      }
-      else {
-        client.me(channel, `${user} --> You dont have permission to use that command! Required: Bot Developer, Broadcaster or Admin`)
-      }
+  if (command === 'permit') {
+    permitSystem(args).then(permitDetails => {
+      client.me(channel, `${user} --> ${permitDetails.reply}`)
     })
   }
